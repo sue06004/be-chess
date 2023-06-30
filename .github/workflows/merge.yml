@@ -1,20 +1,18 @@
 name: "PR merge on time v3.1 by honux"
 
 on:
-schedule:
-
-# run 02:00 UTC = 11:00 KST on every day-of-week from Monday through Saturday
-
-- cron: '0 2 \* \* 1-6'
+  schedule:
+    # run 02:00 UTC = 11:00 KST on every day-of-week from Monday through Saturday
+    - cron: '0 2 \* \* 1-6'
 
 workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
 jobs:
-merge:
-name: "Auto Merge on time"
-runs-on: "ubuntu-latest"
+  merge:
+    name: "Auto Merge on time"
+    runs-on: "ubuntu-latest"
 
     steps:
       - name: "Merge pull request"
