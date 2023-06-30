@@ -3,7 +3,7 @@ name: "PR merge on time v3.1 by honux"
 on:
   schedule:
     # run 02:00 UTC = 11:00 KST on every day-of-week from Monday through Saturday
-    - cron: '0 2 \* \* 1-6'
+    - cron: "0 2 * * 1-6"
 
 workflow_dispatch:
 
