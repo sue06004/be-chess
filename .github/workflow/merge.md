@@ -1,0 +1,119 @@
+name: "PR merge on time v3.1 by honux"
+
+on:
+schedule:
+
+# run 02:00 UTC = 11:00 KST on every day-of-week from Monday through Saturday
+
+- cron: '0 2 \* \* 1-6'
+
+workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+jobs:
+merge:
+name: "Auto Merge on time"
+runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Merge pull request"
+        uses: "actions/github-script@v6"
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const query = `query($owner:String!, $name:String!) {
+              repository(owner: $owner, name: $name) {
+                pullRequests(last: 100, states: OPEN) {
+                  edges {
+                    node {
+                      number
+                      headRefName
+                      baseRefName
+                      author {
+                        login
+                      }
+                      repository {
+                        name
+                      }
+                      mergeable
+                      labels(first: 10) {
+                        nodes {
+                          name
+                        }
+                      }
+                      reviews(last: 1) {
+                        nodes {
+                          state
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`
+
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+            }
+
+            const {repository:{pullRequests:{edges: list}}} = await github.graphql(query, variables)
+            for( let {node} of list) {
+             if(node.baseRefName === "main" || !node.labels.nodes.length) {
+                //add comment
+                await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: node.number,
+                    body: "main 브랜치로 자동 병합은 불가느합니다."
+                })
+                continue;
+             }
+             if (node.reviews.nodes.length && node.reviews.nodes[0].state === "CHANGES_REQUESTED") {
+                //add comment
+                await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: node.number,
+                    body: "리뷰어가 변경 사항을 요청해서 자동 머지를 연기합니다."
+                })
+                continue;
+             }
+
+              try {
+                 if(node.mergeable === "CONFLICTING") {
+                   // add comment
+                     await github.rest.issues.createComment({
+                         owner: context.repo.owner,
+                         repo: context.repo.repo,
+                         issue_number: node.number,
+                         body: "충돌로 인해 자동 병합이 불가능합니다."
+                      })
+                   // close pull request
+                   await github.rest.pulls.update({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: node.number,
+                      state: "closed"
+                    })
+                 } else {
+                    //add comment
+                        await github.rest.issues.createComment({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: node.number,
+                            body: "자동 병합 완료"
+                        })
+                    // merge pull request
+                   await github.rest.pulls.merge({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: node.number,
+                      merge_method: "merge"
+                   })
+                 }
+               } catch (e) {
+                 console.log("error", e);
+               }
+            }
