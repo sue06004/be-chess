@@ -66,6 +66,6 @@ public class PawnTest {
 - [X] verifyPawn(final String color)와 같은 메소드를 추가해 중복 코드를 제거해 본다.
 
 ## PR 보내기
-- [ ] 완료후 PR을 보내자.
+- [X] 완료후 PR을 보내자.
 
-- [ ] 본인 ID 브랜치로 PR 보내는 것을 잊지 말자.
+- [X] 본인 ID 브랜치로 PR 보내는 것을 잊지 말자.
