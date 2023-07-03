@@ -18,16 +18,16 @@ JUnit을 활용한 테스트 코드를 작성할 수 있다.
 1. Pawn 테스트 
 
 ## PawnTest 클래스 생성
-- [ ] PawnTest 클래스 생성
-- [ ] PawnTest를 JUnit으로 실행한다. 테스트 메소드를 구현하지 않았기 때문에 실패하는 것을 확인한다.
-- [ ] create라는 테스트 메소드를 생성한다.
-- [ ] JUnit 테스트 메소드를 생성한 후 테스트 메소드를 실행해 앞 단계의 실패가 성공하는 것을 확인한다.
+- [X] PawnTest 클래스 생성
+- [X] PawnTest를 JUnit으로 실행한다. 테스트 메소드를 구현하지 않았기 때문에 실패하는 것을 확인한다.
+- [X] create라는 테스트 메소드를 생성한다.
+- [X] JUnit 테스트 메소드를 생성한 후 테스트 메소드를 실행해 앞 단계의 실패가 성공하는 것을 확인한다.
 
 ## create() 테스트 메소드 작성
-- [ ] DisplayName 어노테이션을 잘 활용하자.
-- [ ] PawnTest의 create() 메소드에서 Pawn 인스턴스를 생성하고 컴파일이 성공하도록 구현한다.
-- [ ] Pawn을 생성할 때 흰색과 검은색 값을 가지도록 인스턴스를 생성한다.
-- [ ] 흰색(white)을 값으로 가지는 Pawn을 생성한 후 AssertJ의 assert() 메소드를 활용해 테스트가 실패하는지 확인한다.
+- [X] DisplayName 어노테이션을 잘 활용하자.
+- [X] PawnTest의 create() 메소드에서 Pawn 인스턴스를 생성하고 컴파일이 성공하도록 구현한다.
+- [X] Pawn을 생성할 때 흰색과 검은색 값을 가지도록 인스턴스를 생성한다.
+- [X] 흰색(white)을 값으로 가지는 Pawn을 생성한 후 AssertJ의 assert() 메소드를 활용해 테스트가 실패하는지 확인한다.
 
 ```java
 import org.junit.jupiter.api.*;
