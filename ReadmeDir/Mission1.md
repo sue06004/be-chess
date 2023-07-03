@@ -55,15 +55,15 @@ public class PawnTest {
 - [X] 만약 테스트가 실패하면 테스트가 성공하도록 Pawn을 수정한다.
 
 3. 리팩토링
-- [ ] PawnTest의 create()에서 "white", "black" 문자열 값이 중복된다.
+- [X] PawnTest의 create()에서 "white", "black" 문자열 값이 중복된다.
 
-- [ ] "white", "black" 문자에 대한 중복을 제거하기 위해 create() 메소드에 local variable을 추가한다.
+- [X] "white", "black" 문자에 대한 중복을 제거하기 위해 create() 메소드에 local variable을 추가한다.
 
-- [ ] 수정 후 테스트가 성공하는지 확인한다.
+- [X] 수정 후 테스트가 성공하는지 확인한다.
 
-- [ ] PawnTest를 보면 흰색과 검은색 Pawn을 생성하고 결과 값을 확인하는 부분에도 중복이 있다.
+- [X] PawnTest를 보면 흰색과 검은색 Pawn을 생성하고 결과 값을 확인하는 부분에도 중복이 있다.
 
-- [ ] verifyPawn(final String color)와 같은 메소드를 추가해 중복 코드를 제거해 본다.
+- [X] verifyPawn(final String color)와 같은 메소드를 추가해 중복 코드를 제거해 본다.
 
 ## PR 보내기
 - [ ] 완료후 PR을 보내자.
