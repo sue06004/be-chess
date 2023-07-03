@@ -48,11 +48,11 @@ public class PawnTest {
 테스트가 성공하도록 Pawn을 구현한다.
 
 ## 검은색 폰 생성
-- [ ] PawnTest의 create() 메소드에 두 번째 Pawn을 생성하고 "black"이라는 값을 생성자로 전달한다.
+- [X] PawnTest의 create() 메소드에 두 번째 Pawn을 생성하고 "black"이라는 값을 생성자로 전달한다.
 
-- [ ] 두 번째 Pawn의 색이 "black"인지 검증한다.
+- [X] 두 번째 Pawn의 색이 "black"인지 검증한다.
 
-- [ ] 만약 테스트가 실패하면 테스트가 성공하도록 Pawn을 수정한다.
+- [X] 만약 테스트가 실패하면 테스트가 성공하도록 Pawn을 수정한다.
 
 3. 리팩토링
 - [ ] PawnTest의 create()에서 "white", "black" 문자열 값이 중복된다.
