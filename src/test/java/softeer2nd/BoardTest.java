@@ -1,7 +1,5 @@
 package softeer2nd;
 
-
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,7 @@ public class BoardTest {
         board = new Board();
     }
 
+
     @Test
     @DisplayName("체스 판 생성")
     public void create() throws Exception {
@@ -25,12 +24,21 @@ public class BoardTest {
         verifyBoard(Pawn.BLACK_COLOR, 2);
 
     }
-
     public void verifyBoard(final String color, int size){
-        Pawn pawn = new Pawn(color);
+        Pawn pawn = new Pawn(color,"p");
         board.add(pawn);
         assertEquals(size,board.size());
         assertEquals(pawn,board.findPawn(size-1));
+    }
 
+    @Test
+    @DisplayName("체스판 초기화")
+    public void initialize() throws Exception{
+        Board board = new Board();
+        board.initialize();
+        assertEquals("pppppppp", board.getWhitePawnsResult());
+        assertEquals("PPPPPPPP", board.getBlackPawnsResult());
+
+        System.out.println(board.print());
     }
 }
