@@ -1,67 +1,115 @@
 package softeer2nd;
 
 import java.util.ArrayList;
-import pieces.Pawn;
+import pieces.Piece;
+import static utils.StringUtils.*;
 public class Board {
 
     private ArrayList<String> boardList = new ArrayList<>();
-    private ArrayList<Pawn> board_list = new ArrayList<>();
-    public void add(Pawn pawn){
-        this.board_list.add(pawn);
-    }
-    public Pawn findPawn(int idx){
-        return this.board_list.get(idx);
-    }
-    public int size(){
-        return this.board_list.size();
+    private ArrayList<Piece> board_list = new ArrayList<>(); //미션2
+
+    public int pieceCount(){
+        int cnt=0;
+        for(String str : boardList){
+            for (int i=0;i<8;i++){
+                if(str.charAt(i) !='.'){
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
     }
 
     public void initialize(){
         for (int i=0;i<8;i++){
-            boardList.add(makeLine(i));
+            boardList.add(makeRow(i));
         }
     }
 
-    private String makeLine(int i){
-        ArrayList<String> pawnList = new ArrayList<>();
+    private String makeRow(int i){
+        ArrayList<String> pieceList = new ArrayList<>();
 
-        Pawn pawn;
-        if (i==1){
-            pawn = new Pawn(Pawn.BLACK_COLOR, Pawn.BLACK_REPRESENTATION);
+        if (i==0){
+            Piece rook = Piece.createBlackRook();
+            Piece knight = Piece.createBlackKnight();
+            Piece bishop = Piece.createBlackBishop();
+            Piece queen = Piece.createBlackQueen();
+            Piece king = Piece.createBlackKing();
+
+            pieceList.add(rook.getRepresentation());
+            pieceList.add(knight.getRepresentation());
+            pieceList.add(bishop.getRepresentation());
+            pieceList.add(queen.getRepresentation());
+            pieceList.add(king.getRepresentation());
+            pieceList.add(bishop.getRepresentation());
+            pieceList.add(knight.getRepresentation());
+            pieceList.add(rook.getRepresentation());
+
+        }
+        else if (i==1){
+            Piece pawn = Piece.createBlackPawn();
+            pawnAddToList(pieceList, pawn);
         }
         else if(i==6){
-            pawn = new Pawn();
+            Piece pawn = Piece.createWhitePawn();
+            pawnAddToList(pieceList, pawn);
+        }
+        else if(i==7){
+            Piece rook = Piece.createWhiteRook();
+            Piece knight = Piece.createWhiteKnight();
+            Piece bishop = Piece.createWhiteBishop();
+            Piece queen = Piece.createWhiteQueen();
+            Piece king = Piece.createWhiteKing();
+
+            pieceList.add(rook.getRepresentation());
+            pieceList.add(knight.getRepresentation());
+            pieceList.add(bishop.getRepresentation());
+            pieceList.add(queen.getRepresentation());
+            pieceList.add(king.getRepresentation());
+            pieceList.add(bishop.getRepresentation());
+            pieceList.add(knight.getRepresentation());
+            pieceList.add(rook.getRepresentation());
+
         }
         else{
-            pawn = new Pawn(Pawn.OTHER_COLOR, Pawn.OTHER_REPRESENTATION);
+            pieceList.add("........");
         }
 
+        return convertListToString(pieceList,false);
+
+    }
+    private void pawnAddToList(ArrayList pawnList, Piece pawn){
         for (int j=0;j<8;j++) {
             pawnList.add(pawn.getRepresentation());
         }
-
-        return convertString(pawnList);
-
     }
-    private String convertString(ArrayList<String> arraylist){
+    private String convertListToString(ArrayList<String> arraylist, boolean sep){
         StringBuilder stringBuilder = new StringBuilder();
         for(String str : arraylist){
-            stringBuilder.append(str);
+            if(sep==false)
+                stringBuilder.append(str);
+            else
+                stringBuilder.append(appendNewLine(str));
         }
         return stringBuilder.toString();
     }
+
+    public String showBoard(){
+        String boardString = convertListToString(boardList,true);
+        return boardString;
+    }
+
+    //미션2
     public String getWhitePawnsResult(){
         return boardList.get(6);
     }
     public String getBlackPawnsResult(){
         return boardList.get(1);
     }
-    public String print(){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(String str: boardList){
-            stringBuilder.append(str);
-            stringBuilder.append("\n");
-        }
-        return stringBuilder.toString();
+    public void add(Piece piece){
+        this.board_list.add(piece);
+    }
+    public Piece findPawn(int idx){
+        return this.board_list.get(idx);
     }
 }

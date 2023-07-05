@@ -18,7 +18,7 @@ public class Main {
                 System.out.println("게임을 시작합니다.");
                 Board board = new Board();
                 board.initialize();
-                System.out.println(board.print());
+                System.out.println(board.showBoard());
             }
             else{
                 System.out.println("잘못된 명령을 입력하였습니다.");
