@@ -1,115 +1,196 @@
 package softeer2nd;
 
 import java.util.ArrayList;
+
 import pieces.Piece;
+import utils.Position;
+import utils.Rank;
 import static utils.StringUtils.*;
+
 public class Board {
 
-    private ArrayList<String> boardList = new ArrayList<>();
-    private ArrayList<Piece> board_list = new ArrayList<>(); //미션2
+    private ArrayList<Rank> boardList = new ArrayList<>();
 
-    public int pieceCount(){
-        int cnt=0;
-        for(String str : boardList){
-            for (int i=0;i<8;i++){
-                if(str.charAt(i) !='.'){
-                    cnt++;
-                }
-            }
+    public void initializeEmpty(){
+        for (int i=0;i<8;i++){
+            Rank rank = new Rank();
+            blankRank(rank);
+            boardList.add(rank);
         }
-        return cnt;
     }
 
     public void initialize(){
         for (int i=0;i<8;i++){
-            boardList.add(makeRow(i));
+            initRank(i);
         }
     }
-
-    private String makeRow(int i){
-        ArrayList<String> pieceList = new ArrayList<>();
+    private void initRank(int i){
+        Rank rank = new Rank();
 
         if (i==0){
-            Piece rook = Piece.createBlackRook();
-            Piece knight = Piece.createBlackKnight();
-            Piece bishop = Piece.createBlackBishop();
-            Piece queen = Piece.createBlackQueen();
-            Piece king = Piece.createBlackKing();
-
-            pieceList.add(rook.getRepresentation());
-            pieceList.add(knight.getRepresentation());
-            pieceList.add(bishop.getRepresentation());
-            pieceList.add(queen.getRepresentation());
-            pieceList.add(king.getRepresentation());
-            pieceList.add(bishop.getRepresentation());
-            pieceList.add(knight.getRepresentation());
-            pieceList.add(rook.getRepresentation());
-
+            initBlackNotPawn(rank);
         }
         else if (i==1){
-            Piece pawn = Piece.createBlackPawn();
-            pawnAddToList(pieceList, pawn);
+            initBlackPawn(rank);
         }
         else if(i==6){
-            Piece pawn = Piece.createWhitePawn();
-            pawnAddToList(pieceList, pawn);
+            initWhitePawn(rank);
         }
         else if(i==7){
-            Piece rook = Piece.createWhiteRook();
-            Piece knight = Piece.createWhiteKnight();
-            Piece bishop = Piece.createWhiteBishop();
-            Piece queen = Piece.createWhiteQueen();
-            Piece king = Piece.createWhiteKing();
-
-            pieceList.add(rook.getRepresentation());
-            pieceList.add(knight.getRepresentation());
-            pieceList.add(bishop.getRepresentation());
-            pieceList.add(queen.getRepresentation());
-            pieceList.add(king.getRepresentation());
-            pieceList.add(bishop.getRepresentation());
-            pieceList.add(knight.getRepresentation());
-            pieceList.add(rook.getRepresentation());
-
+            initWhiteNotPawn(rank);
         }
         else{
-            pieceList.add("........");
+            blankRank(rank);
         }
 
-        return convertListToString(pieceList,false);
-
+        boardList.add(rank);
     }
-    private void pawnAddToList(ArrayList pawnList, Piece pawn){
+    private void initBlackNotPawn(Rank rank){
+        Piece rook0 = Piece.createBlackRook();
+        Piece rook1 = Piece.createBlackRook();
+        Piece knight0 = Piece.createBlackKnight();
+        Piece knight1 = Piece.createBlackKnight();
+        Piece bishop0 = Piece.createBlackBishop();
+        Piece bishop1 = Piece.createBlackBishop();
+        Piece queen = Piece.createBlackQueen();
+        Piece king = Piece.createBlackKing();
+
+        rank.add(rook0);
+        rank.add(knight0);
+        rank.add(bishop0);
+        rank.add(queen);
+        rank.add(king);
+        rank.add(bishop1);
+        rank.add(knight1);
+        rank.add(rook1);
+    }
+    private void initWhiteNotPawn(Rank rank){
+        Piece rook0 = Piece.createWhiteRook();
+        Piece rook1 = Piece.createWhiteRook();
+        Piece knight0 = Piece.createWhiteKnight();
+        Piece knight1 = Piece.createWhiteKnight();
+        Piece bishop0 = Piece.createWhiteBishop();
+        Piece bishop1 = Piece.createWhiteBishop();
+        Piece queen = Piece.createWhiteQueen();
+        Piece king = Piece.createWhiteKing();
+
+        rank.add(rook0);
+        rank.add(knight0);
+        rank.add(bishop0);
+        rank.add(queen);
+        rank.add(king);
+        rank.add(bishop1);
+        rank.add(knight1);
+        rank.add(rook1);
+    }
+    private void initBlackPawn(Rank rank){
         for (int j=0;j<8;j++) {
-            pawnList.add(pawn.getRepresentation());
+            Piece pawn = Piece.createBlackPawn();
+            rank.add(pawn);
         }
     }
-    private String convertListToString(ArrayList<String> arraylist, boolean sep){
+    private void initWhitePawn(Rank rank){
+        for (int j=0;j<8;j++) {
+            Piece pawn = Piece.createWhitePawn();
+            rank.add(pawn);
+        }
+    }
+    private void blankRank(Rank rank){
+        for (int j=0;j<8;j++) {
+            Piece blank = Piece.createBlank();
+            rank.add(blank);
+        }
+    }
+
+
+    public String showBoard(){
         StringBuilder stringBuilder = new StringBuilder();
-        for(String str : arraylist){
-            if(sep==false)
-                stringBuilder.append(str);
-            else
-                stringBuilder.append(appendNewLine(str));
+        for(Rank rank : boardList){
+            stringBuilder.append(appendNewLine(rank.toString()));
         }
         return stringBuilder.toString();
     }
 
-    public String showBoard(){
-        String boardString = convertListToString(boardList,true);
-        return boardString;
+    public int pieceCount(Piece.Color color, Piece.Type type ){
+        int cnt=0;
+        for(Rank rank : boardList){
+            cnt+=rank.cntPiece(color,type);
+        }
+        return cnt;
     }
 
-    //미션2
-    public String getWhitePawnsResult(){
-        return boardList.get(6);
+    public Piece findPiece(String pos){
+        Position position = new Position(pos);
+
+        Rank rank = boardList.get(8-position.getY());
+        Piece piece = rank.getRank().get(position.getX());
+        return piece;
     }
-    public String getBlackPawnsResult(){
-        return boardList.get(1);
+
+    public void move(String pos, Piece piece){
+        Position position = new Position(pos);
+
+        Rank rank = boardList.get(8-position.getY());
+        rank.set(position.getX(),piece);
     }
-    public void add(Piece piece){
-        this.board_list.add(piece);
+
+    public double caculcatePoint(Piece.Color color){
+        double point = 0;
+        for(int rank=0; rank<8; rank++){
+            point += calcPointRow(rank, color);
+        }
+        return point;
     }
-    public Piece findPawn(int idx){
-        return this.board_list.get(idx);
+    private double calcPointRow(int rank,Piece.Color color){
+        double[] tmp;
+        double cntPawn=0;
+        double point = 0;
+
+        for(int row=0;row<8;row++){
+            Rank pieces = boardList.get(row);
+            Piece piece = pieces.get(rank);
+            tmp = getPiecePoint(piece, color);
+
+            point += tmp[0];
+            cntPawn += tmp[1];
+        }
+        if (cntPawn>1){
+            point-=cntPawn*0.5;
+        }
+        return point;
+    }
+    private double[] getPiecePoint(Piece piece, Piece.Color color){
+        double cntPawn = 0.0;
+        double point = 0.0;
+        if(piece.getColor()==color){
+            cntPawn += ifPawn(piece);
+            point += piece.getType().getDefaultPoint();
+        }
+        return new double[] {point, cntPawn};
+    }
+    private double ifPawn(Piece piece){
+        if(piece.getType()==Piece.Type.PAWN){
+            return 1.0;
+        }
+        return 0.0;
+    }
+
+    public Rank sort(Piece.Color color){
+        Rank pieces = new Rank();
+        for(Rank rank : boardList){
+            sortRank(pieces, rank, color);
+        }
+        pieces.sort();
+        return pieces;
+    }
+    private void sortRank(Rank pieces, Rank rank, Piece.Color color){
+        for(Piece piece : rank.getRank()){
+            ifEqualColor(pieces, piece, color);
+        }
+    }
+    private void ifEqualColor(Rank pieces,Piece piece, Piece.Color color){
+        if(piece.getColor()==color){
+            pieces.add(piece);
+        }
     }
 }
