@@ -2,11 +2,12 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import pieces.Piece;
 public class Rank {
 
-    ArrayList<Piece> rank;
+    List<Piece> rank;
 
     public Rank(){
         this.rank = new ArrayList<Piece>();
@@ -21,7 +22,7 @@ public class Rank {
     public Piece get(int idx){
         return rank.get(idx);
     }
-    public ArrayList<Piece> getRank(){
+    public List<Piece> getRank(){
         return rank;
     }
 

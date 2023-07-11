@@ -1,34 +1,45 @@
 package pieces;
 
+import softeer2nd.Board;
+import utils.Direction;
+import utils.Position;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Piece implements Comparable<Piece>{
+import static java.lang.Math.abs;
 
-    public enum Color{
+public abstract class Piece implements Comparable<Piece> {
+
+    public enum Color {
         WHITE, BLACK, NOCOLOR;
     }
 
-    public enum Type{
-        PAWN('p',1.0), ROOK('r',5.0), KNIGHT('n',2.5), BISHOP('b',3.0), QUEEN('q',9.0), KING('k',0.0), NO_PIECE('.',0.0);
+    public enum Type {
+        PAWN('p', 1.0), ROOK('r', 5.0), KNIGHT('n', 2.5), BISHOP('b', 3.0), QUEEN('q', 9.0), KING('k', 0.0), NO_PIECE('.', 0.0);
 
         private char representation;
         private double defaultPoint;
 
-        Type(char representation, double defaultPoint){
+        Type(char representation, double defaultPoint) {
             this.representation = representation;
             this.defaultPoint = defaultPoint;
         }
 
-        public char getWhiteRepresentation(){
+        public char getWhiteRepresentation() {
             return this.representation;
         }
-        public char getBlackRepresentation(){
+
+        public char getBlackRepresentation() {
             return Character.toUpperCase(this.representation);
         }
-        public char getBlankRepresentation(){
+
+        public char getBlankRepresentation() {
             return this.representation;
         }
-        public double getDefaultPoint(){
+
+        public double getDefaultPoint() {
             return defaultPoint;
         }
 
@@ -36,99 +47,117 @@ public class Piece implements Comparable<Piece>{
 
     private Color color;
     private Type type;
+    private Position position;
 
-    private Piece(Color color, Type type){
+    protected Piece(Color color, Type type, Position pos) {
         this.color = color;
         this.type = type;
+        this.position = pos;
     }
 
-    private static Piece createWhite(Type type){
-        Piece piece = new Piece(Color.WHITE, type);
-        return piece;
-    }
-    private static Piece createBlack(Type type){
-        Piece piece = new Piece(Color.BLACK, type);
-        return piece;
-    }
-
-    public static Piece createBlackPawn(){
-        Piece piece = createBlack(Type.PAWN);
-        return piece;
-    }
-    public static Piece createWhitePawn(){
-        Piece piece = createWhite(Type.PAWN);
-        return piece;
-    }
-    public static Piece createBlackKnight(){
-        Piece piece = createBlack(Type.KNIGHT);
-        return piece;
-    }
-    public static Piece createWhiteKnight(){
-        Piece piece = createWhite(Type.KNIGHT);
-        return piece;
-    }
-    public static Piece createBlackRook(){
-        Piece piece = createBlack(Type.ROOK);
-        return piece;
-    }
-    public static Piece createWhiteRook(){
-        Piece piece = createWhite(Type.ROOK);
-        return piece;
-    }
-    public static Piece createBlackBishop(){
-        Piece piece = createBlack(Type.BISHOP);
-        return piece;
-    }
-    public static Piece createWhiteBishop(){
-        Piece piece = createWhite(Type.BISHOP);
-        return piece;
-    }
-    public static Piece createBlackQueen(){
-        Piece piece = createBlack(Type.QUEEN);
-        return piece;
-    }
-    public static Piece createWhiteQueen(){
-        Piece piece = createWhite(Type.QUEEN);
-        return piece;
-    }
-    public static Piece createBlackKing(){
-        Piece piece = createBlack(Type.KING);
-        return piece;
-    }
-    public static Piece createWhiteKing(){
-        Piece piece = createWhite(Type.KING);
-        return piece;
-    }
-    public static Piece createBlank(){
-        Piece piece = new Piece(Color.NOCOLOR,Type.NO_PIECE);
-        return piece;
-    }
-
-    public Type getType(){
+    public Type getType() {
         return type;
     }
-    public Color getColor(){
+
+    public Color getColor() {
         return this.color;
     }
-    public boolean equals(Object o){
-        Piece piece =(Piece) o;
-        return color==piece.color && type==piece.type;
+
+    public Position getPosition() {
+        return this.position;
     }
 
-    public boolean isBlack(){
+    public void setPosition(Position pos) {
+        this.position = pos;
+    }
+
+
+    public boolean isBlack() {
         return color.equals(Color.BLACK);
     }
-    public boolean isWhite(){
+
+    public boolean isWhite() {
         return color.equals(Color.WHITE);
     }
 
-    @Override
-    public int compareTo(Piece p){
-        if(this.type.getDefaultPoint() > p.getType().getDefaultPoint())
-            return -1;
-        else if(this.type.getDefaultPoint()< p.getType().getDefaultPoint())
-            return 1;
-        else
-            return 0;
+    public boolean isBlank() {
+        return color.equals(Color.NOCOLOR);
     }
+
+    public abstract boolean verifyMovePosition(Board board, Position pos);
+
+    protected boolean verifyMovePossible(Board board, Position targetPosition) {
+        Position sourcePosition = getPosition();
+        if (board.checkBoundary(targetPosition)) {
+            Piece targetPiece = board.findPiece(targetPosition);
+            int xDir = getXDirection(sourcePosition, targetPosition);
+            int yDir = getYDirection(sourcePosition, targetPosition);
+
+            Direction dir = Direction.valueOf(xDir, yDir);
+            List<Direction> dirList = getDirectionList(type);
+            if (dirList.contains(dir)) {
+                Position newPos = Position.createPosition(String.valueOf((char) ('a' + sourcePosition.getX() + xDir)) + String.valueOf(sourcePosition.getY() + yDir));
+                return !equalsColor(targetPiece.getColor()) && board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
+            }
+        }
+        return false;
+    }
+
+    private List<Direction> getDirectionList(Type type) {
+        if (type == Type.KING || type == Type.QUEEN) {
+            return Direction.everyDirection();
+        } else if (type == Type.ROOK) {
+            return Direction.linearDirection();
+        } else if (type == Type.BISHOP) {
+            return Direction.diagonalDirection();
+        } else if (type == Type.KNIGHT) {
+            return Direction.knightDirection();
+        } else if (type == Type.PAWN && isBlack()) {
+            return Direction.blackPawnDirection();
+        } else if (type == Type.PAWN && isWhite()) {
+            return Direction.whitePawnDirection();
+        }
+        return new ArrayList<Direction>();
+    }
+    private int getXDirection(Position sourcePosition, Position targetPosition) {
+        if (type == Type.KNIGHT || type == Type.KING) {
+            return targetPosition.getX() - sourcePosition.getX();
+        } else if (type == Type.QUEEN || type == Type.ROOK || type == Type.BISHOP) {
+            return targetPosition.getX() - sourcePosition.getX() == 0 ? 0 : (targetPosition.getX() - sourcePosition.getX()) / abs(targetPosition.getX() - sourcePosition.getX());
+        }
+        return 0;
+    }
+    private int getYDirection(Position sourcePosition, Position targetPosition) {
+        if (type == Type.KNIGHT || type == Type.KING) {
+            return targetPosition.getY() - sourcePosition.getY();
+        } else if (type == Type.QUEEN || type == Type.ROOK || type == Type.BISHOP) {
+            return targetPosition.getY() - sourcePosition.getY() == 0 ? 0 : (targetPosition.getY() - sourcePosition.getY()) / abs(targetPosition.getY() - sourcePosition.getY());
+        }
+        return 0;
+    }
+
+    public boolean equalsColor(Color color) {
+        return this.color == color;
+    }
+
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Piece) {
+            Piece piece = (Piece) o;
+            return color == piece.getColor() && type == piece.getType() && position.equals(piece.getPosition());
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(Piece p) {
+        return Double.compare(p.getType().getDefaultPoint(), type.getDefaultPoint());
+    }
+
+
 }
