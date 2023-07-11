@@ -21,14 +21,6 @@ public class ChessGame {
         return new ChessGame(board);
     }
 
-    public void put(String pos, Piece piece) {
-        List<Rank> boardList = board.getBoard();
-        Position position = Position.createPosition(pos);
-
-        Rank rank = boardList.get(8 - position.getY());
-        rank.set(position.getX(), piece);
-    }
-
     public boolean move(String sourcePos, String targetPos) {
         Position sourcePosition = Position.createPosition(sourcePos);
         Position targetPosition = Position.createPosition(targetPos);
@@ -84,28 +76,6 @@ public class ChessGame {
             return 1.0;
         }
         return 0.0;
-    }
-
-    public Rank sort(Piece.Color color) {
-        List<Rank> boardList = board.getBoard();
-        Rank pieces = new Rank();
-        for (Rank rank : boardList) {
-            sortRank(pieces, rank, color);
-        }
-        pieces.sort();
-        return pieces;
-    }
-
-    private void sortRank(Rank pieces, Rank rank, Piece.Color color) {
-        for (Piece piece : rank.getRank()) {
-            ifEqualColor(pieces, piece, color);
-        }
-    }
-
-    private void ifEqualColor(Rank pieces, Piece piece, Piece.Color color) {
-        if (piece.getColor() == color) {
-            pieces.add(piece);
-        }
     }
 
 }

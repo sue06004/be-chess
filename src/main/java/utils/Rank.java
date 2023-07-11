@@ -54,5 +54,9 @@ public class Rank {
         return cnt;
     }
 
+    public void addEqualColor(Rank pieces, Piece.Color color){
+        pieces.getRank().stream().filter(piece -> piece.equalsColor(color))
+                .forEach(rank :: add);
+    }
 
 }

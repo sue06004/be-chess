@@ -73,11 +73,11 @@ public class BoardTest {
         assertEquals(1, board.pieceCount(Color.WHITE, Piece.Type.KING));
         assertEquals(8, board.pieceCount(Color.WHITE, Piece.Type.PAWN));
     }
-//    @Test
-//    @DisplayName("정렬 테스트")
-//    public void 기물정렬() throws Exception{
-//        board.initialize();
-//        Rank pieces = board.sort(Color.BLACK);
-//        assertEquals("QRRBBNNPPPPPPPPK",pieces.toString());
-//    }
+    @Test
+    @DisplayName("정렬 테스트")
+    public void 기물정렬() throws Exception{
+        board.initialize();
+        Rank pieces = board.sort(Color.BLACK);
+        assertEquals("QRRBBNNPPPPPPPPK",pieces.toString());
+    }
 }

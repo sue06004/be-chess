@@ -32,19 +32,13 @@ class ChessGameTest {
     }
 
     @Test
-    @DisplayName("Sort 테스트")
-    public void sort() throws Exception {
-        System.out.println(chessGame.sort(Color.BLACK));
-    }
-
-    @Test
     @DisplayName("킹 이동 테스트")
     public void moveKing() throws Exception {
         board = new Board();
         board.initializeEmpty();
         chessGame = ChessGame.createChessGame(board);
 
-        chessGame.put("b6", Pawn.createBlack(Position.createPosition("b6")));
+        board.put("b6", Pawn.createBlack(Position.createPosition("b6")));
         board.put("e6", Queen.createBlack(Position.createPosition("e6")));
         board.put("b8", King.createBlack(Position.createPosition("b8")));
         board.put("c8", Rook.createBlack(Position.createPosition("c8")));
@@ -64,13 +58,14 @@ class ChessGameTest {
         String targetPosition6 = "f2";
         String targetPosition7 = "e3";
 
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition1));
-        assertEquals(true, chessGame.move(targetPosition1, targetPosition2));
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition4));
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition5));
-        assertEquals(true, chessGame.move(targetPosition2, targetPosition6));
-        assertEquals(true, chessGame.move(targetPosition6, targetPosition7));
+        assertEquals(true, chessGame.move(sourcePosition, targetPosition1)); //위로
+        assertEquals(true, chessGame.move(targetPosition1, targetPosition2)); // 오른쪽 아래로
+        assertEquals(false, chessGame.move(targetPosition2, targetPosition3)); // 왼위위, 킹이 갈수 없는 경로
+        assertEquals(false, chessGame.move(targetPosition2, targetPosition4)); // out of boundary
+        assertEquals(false, chessGame.move(targetPosition2, targetPosition5)); // 도착지에 같은색
+        assertEquals(true, chessGame.move(targetPosition2, targetPosition6)); // 왼위
+        assertEquals(true, chessGame.move(targetPosition6, targetPosition7)); // 도착지에 다른색
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
     }
 
     @Test
@@ -103,15 +98,16 @@ class ChessGameTest {
         String targetPosition8 = "g0";
         String targetPosition9 = "e1";
 
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition1));
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition2));
-        assertEquals(true, chessGame.move(targetPosition1, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition4));
-        assertEquals(true, chessGame.move(targetPosition3, targetPosition5));
-        assertEquals(false, chessGame.move(targetPosition5, targetPosition6));
-        assertEquals(true, chessGame.move(targetPosition5, targetPosition7));
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition8));
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition9));
+        assertEquals(true, chessGame.move(sourcePosition, targetPosition1)); // 위위
+        assertEquals(false, chessGame.move(targetPosition1, targetPosition2)); // 뛰어넘기
+        assertEquals(true, chessGame.move(targetPosition1, targetPosition3)); // 왼아래 대각선
+        assertEquals(false, chessGame.move(targetPosition3, targetPosition4)); // 도차지에 같은색
+        assertEquals(true, chessGame.move(targetPosition3, targetPosition5)); // 오른쪽 아래
+        assertEquals(false, chessGame.move(targetPosition5, targetPosition6)); // 도착지에 같은색
+        assertEquals(true, chessGame.move(targetPosition5, targetPosition7)); // 오른쪽 대각선 아래에 다른색
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition8)); // out of boundary
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition9)); // 못가는 방향
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
     }
 
     @Test
@@ -149,6 +145,7 @@ class ChessGameTest {
         assertEquals(false, chessGame.move(targetPosition1, targetPosition5));
         assertEquals(true, chessGame.move(targetPosition1, targetPosition6));
         assertEquals(true, chessGame.move(targetPosition6, targetPosition7));
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
     }
 
     @Test
@@ -188,6 +185,7 @@ class ChessGameTest {
         assertEquals(true, chessGame.move(targetPosition5, targetPosition6));
         assertEquals(true, chessGame.move(targetPosition6, targetPosition7));
         assertEquals(false, chessGame.move(targetPosition7, targetPosition8));
+        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
     }
 
     @Test
@@ -222,6 +220,7 @@ class ChessGameTest {
         assertEquals(true, chessGame.move(targetPosition2, targetPosition3));
         assertEquals(false, chessGame.move(targetPosition3, targetPosition4));
         assertEquals(false, chessGame.move(targetPosition3, targetPosition5));
+        assertEquals(false, chessGame.move(targetPosition3, targetPosition3)); //같은 위치
     }
 
     @Test
@@ -254,6 +253,7 @@ class ChessGameTest {
         String targetPosition3 = "e4"; // 대각선에 다른 색
         String targetPosition4 = "e2"; // 못가는 방향
         String targetPosition5 = "a9"; //outbound
+        String targetPosition6 = "c5"; // 대각선에 아무것도 없음
 
 
         assertEquals(false, chessGame.move(sourcePosition2, targetPosition1));
@@ -261,6 +261,8 @@ class ChessGameTest {
         assertEquals(true, chessGame.move(targetPosition2, targetPosition3));
         assertEquals(false, chessGame.move(targetPosition3, targetPosition4));
         assertEquals(false, chessGame.move(sourcePosition3, targetPosition5));
+        assertEquals(false, chessGame.move(targetPosition3, targetPosition3)); //같은 위치
+        assertEquals(false, chessGame.move(targetPosition3, targetPosition6));
 
     }
 }

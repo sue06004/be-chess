@@ -84,29 +84,19 @@ public class Board {
         }
     }
 
-    public List<Rank> getBoard(){
-        return rankList;
-    }
-
     public Rank sort(Piece.Color color){
         Rank pieces = new Rank();
+
         for(Rank rank : rankList){
-            sortRank(pieces, rank, color);
+            pieces.addEqualColor(rank, color);
         }
         pieces.sort();
         return pieces;
     }
-    private void sortRank(Rank pieces, Rank rank, Piece.Color color){
-        for(Piece piece : rank.getRank()){
-            ifEqualColor(pieces, piece, color);
-        }
-    }
-    private void ifEqualColor(Rank pieces,Piece piece, Piece.Color color){
-        if(piece.getColor()==color){
-            pieces.add(piece);
-        }
-    }
 
+    public List<Rank> getBoard(){
+        return rankList;
+    }
     public Piece findPiece(String pos) {
         Position position = Position.createPosition(pos);
 
