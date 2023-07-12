@@ -7,37 +7,40 @@ import pieces.*;
 import utils.Position;
 import utils.Rank;
 
+import static utils.StringUtils.appendNewLine;
+
 public class Board {
 
+    public final static int BOARD_LENGTH = 8;
     private List<Rank> rankList = new ArrayList<>();
 
     public void initializeEmpty() {
-        for (int i = 0; i < 8; i++) {
+        for (int rankIdx = 0; rankIdx < 8; rankIdx++) {
             Rank rank = new Rank();
-            blankRank(i, rank);
+            blankRank(rankIdx, rank);
             rankList.add(rank);
         }
     }
 
     public void initialize() {
-        for (int i = 0; i < 8; i++) {
-            initRank(i);
+        for (int rankIdx = 0; rankIdx < 8; rankIdx++) {
+            initRank(rankIdx);
         }
     }
 
-    private void initRank(int i) {
+    private void initRank(int rankIdx) {
         Rank rank = new Rank();
 
-        if (i == 0) {
+        if (rankIdx == 0) {
             initBlackNotPawn(rank);
-        } else if (i == 1) {
+        } else if (rankIdx == 1) {
             initBlackPawn(rank);
-        } else if (i == 6) {
+        } else if (rankIdx == 6) {
             initWhitePawn(rank);
-        } else if (i == 7) {
+        } else if (rankIdx == 7) {
             initWhiteNotPawn(rank);
         } else {
-            blankRank(i, rank);
+            blankRank(rankIdx, rank);
         }
 
         rankList.add(rank);
@@ -66,22 +69,22 @@ public class Board {
     }
 
     private void initBlackPawn(Rank rank) {
-        for (int j = 0; j < 8; j++) {
-            String pos = 'a' + j + "7";
+        for (int file = 0; file < 8; file++) {
+            String pos = 'a' + file + "7";
             rank.add(Pawn.createBlack(Position.createPosition(pos)));
         }
     }
 
     private void initWhitePawn(Rank rank) {
-        for (int j = 0; j < 8; j++) {
-            String pos = 'a' + j + "7";
+        for (int file = 0; file < 8; file++) {
+            String pos = 'a' + file + "7";
             rank.add(Pawn.createWhite(Position.createPosition(pos)));
         }
     }
 
     private void blankRank(int y, Rank rank) {
-        for (int j = 0; j < 8; j++) {
-            String pos = 'a' + j + String.valueOf(8 - y);
+        for (int file = 0; file < 8; file++) {
+            String pos = 'a' + file + String.valueOf(8 - y);
             rank.add(Blank.createBlank(Position.createPosition(pos)));
         }
     }
@@ -90,32 +93,29 @@ public class Board {
         Rank pieces = new Rank();
 
         for (Rank rank : rankList) {
-            pieces.addEqualColor(rank, color);
+            List<Piece> sameColorPieces = rank.collectPieces(color);
+            pieces.addAll(sameColorPieces);
         }
         pieces.sort();
         return pieces;
     }
 
-    public List<Rank> getBoard() {
-        return rankList;
-    }
-
     public Piece findPiece(String pos) {
         Position position = Position.createPosition(pos);
 
-        Rank rank = rankList.get(8 - position.getY());
-        return rank.getRank().get(position.getX());
+        Rank rank = rankList.get(BOARD_LENGTH - position.getY());
+        return rank.get(position.getX());
     }
 
     public Piece findPiece(Position position) {
-        Rank rank = rankList.get(8 - position.getY());
-        return rank.getRank().get(position.getX());
+        Rank rank = rankList.get(BOARD_LENGTH - position.getY());
+        return rank.get(position.getX());
     }
 
     public void put(String pos, Piece piece) {
         Position position = Position.createPosition(pos);
 
-        Rank rank = rankList.get(8 - position.getY());
+        Rank rank = rankList.get(BOARD_LENGTH - position.getY());
         rank.set(position.getX(), piece);
     }
 
@@ -123,8 +123,8 @@ public class Board {
         Piece blankPiece = Blank.createBlank(sourcePosition);
         Piece sourcePiece = findPiece(sourcePosition);
 
-        Rank sourceRank = rankList.get(8 - sourcePosition.getY());
-        Rank targetRank = rankList.get(8 - targetPosition.getY());
+        Rank sourceRank = rankList.get(BOARD_LENGTH - sourcePosition.getY());
+        Rank targetRank = rankList.get(BOARD_LENGTH - targetPosition.getY());
 
         sourcePiece.setPosition(targetPosition);
         sourceRank.set(sourcePosition.getX(), blankPiece);
@@ -132,7 +132,7 @@ public class Board {
     }
 
     public static boolean checkBoundary(Position pos) {
-        return pos.getY() > 0 && pos.getY() <= 8 && pos.getX() >= 0 && pos.getX() < 8;
+        return pos.getY() > 0 && pos.getY() <= BOARD_LENGTH && pos.getX() >= 0 && pos.getX() < BOARD_LENGTH;
     }
 
     public boolean checkOtherPiece(Position pos, Position targetPos, int xDir, int yDir) {
@@ -156,5 +156,14 @@ public class Board {
             cnt += rank.count(color, type);
         }
         return cnt;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Rank rank : rankList) {
+            stringBuilder.append(appendNewLine(rank.toString()));
+        }
+        return stringBuilder.toString();
     }
 }

@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pieces.Piece;
 
@@ -16,6 +17,10 @@ public class Rank {
 
     public void add(Piece piece) {
         rank.add(piece);
+    }
+
+    public void addAll(List<Piece> pieces) {
+        rank.addAll(pieces);
     }
 
     public void set(int idx, Piece piece) {
@@ -34,6 +39,7 @@ public class Rank {
         Collections.sort(rank);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Piece p : this.rank) {
@@ -56,9 +62,8 @@ public class Rank {
                 .count();
     }
 
-    public void addEqualColor(Rank pieces, Piece.Color color) {
-        pieces.getRank().stream().filter(piece -> piece.equalsColor(color))
-                .forEach(rank::add);
+    public List<Piece> collectPieces(Piece.Color color) {
+        return rank.stream().filter(piece -> piece.equalsColor(color))
+                .collect(Collectors.toList());
     }
-
 }

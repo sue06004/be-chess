@@ -6,17 +6,10 @@ import static utils.StringUtils.appendNewLine;
 
 public class ChessView {
 
-    private Board board;
+    private ChessView() {}
 
-    private ChessView(Board board) {
-        this.board = board;
+    public static void showBoard(Board board){
+        System.out.println(board.toString());
     }
 
-    public static String showBoard(Board board) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Rank rank : board.getBoard()) {
-            stringBuilder.append(appendNewLine(rank.toString()));
-        }
-        return stringBuilder.toString();
-    }
 }

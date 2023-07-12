@@ -21,15 +21,6 @@ class ChessViewTest {
     @DisplayName("ChessView 테스트")
     void showBoard() {
         board.initialize();
-        String blankRank = appendNewLine("........");
-        assertEquals(
-        appendNewLine("RNBQKBNR") +
-                appendNewLine("PPPPPPPP") +
-                blankRank + blankRank + blankRank + blankRank +
-                appendNewLine("pppppppp") +
-                appendNewLine("rnbqkbnr"),
-                ChessView.showBoard(board)
-        );
-
+        cv.showBoard(board);
     }
 }

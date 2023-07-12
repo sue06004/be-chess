@@ -19,13 +19,13 @@ public class Main {
                 System.out.println("게임을 시작합니다.");
                 board = new Board();
                 board.initialize();
-                System.out.println(ChessView.showBoard(board));
+                ChessView.showBoard(board);
             }
             else if (cmd.startsWith("move")){
                 ChessGame chessGame = ChessGame.createChessGame(board);
                 String[] pos = cmd.split(" ");
                 chessGame.move(pos[1],pos[2]);
-                System.out.println(ChessView.showBoard(board));
+                ChessView.showBoard(board);
             }
             else{
                 System.out.println("잘못된 명령을 입력하였습니다.");

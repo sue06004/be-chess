@@ -2,12 +2,6 @@ package softeer2nd;
 
 import pieces.Piece;
 import utils.Position;
-import utils.Rank;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.*;
 
 public class ChessGame {
 
@@ -17,7 +11,7 @@ public class ChessGame {
         this.board = board;
     }
 
-    public static ChessGame createChessGame(Board board){
+    public static ChessGame createChessGame(Board board) {
         return new ChessGame(board);
     }
 
@@ -26,7 +20,7 @@ public class ChessGame {
         Position targetPosition = Position.createPosition(targetPos);
 
         Piece sourcePiece = board.findPiece(sourcePos);
-        if (sourcePiece.verifyMovePosition(board, targetPosition)){
+        if (sourcePiece.verifyMovePosition(board, targetPosition)) {
             board.moving(sourcePosition, targetPosition);
             return true;
         }
@@ -35,25 +29,23 @@ public class ChessGame {
 
     public double caculcatePoint(Piece.Color color) {
         double point = 0;
-        for (int rank = 0; rank < 8; rank++) {
-            point += calcPointFile(rank, color);
+        for (int file = 0; file < 8; file++) {
+            point += calcPointFile(file, color);
         }
         return point;
     }
 
-    private double calcPointFile(int rank, Piece.Color color) {
-        List<Rank> boardList = board.getBoard();
-        double[] tmp;
+    private double calcPointFile(int file, Piece.Color color) {
+
         double cntPawn = 0;
         double point = 0;
 
-        for (int file = 0; file < 8; file++) {
-            Rank pieces = boardList.get(file);
-            Piece piece = pieces.get(rank);
-            tmp = getPiecePoint(piece, color);
+        for (int rank = 1; rank <= Board.BOARD_LENGTH; rank++) {
+            Position position = Position.createPosition((char) ('a' + file) + String.valueOf(rank));
+            Piece piece = board.findPiece(position);
 
-            point += tmp[0];
-            cntPawn += tmp[1];
+            point += getPiecePoint(piece, color);
+            cntPawn += isPawn(piece);
         }
         if (cntPawn > 1) {
             point -= cntPawn * 0.5;
@@ -61,18 +53,15 @@ public class ChessGame {
         return point;
     }
 
-    private double[] getPiecePoint(Piece piece, Piece.Color color) {
-        double cntPawn = 0.0;
-        double point = 0.0;
-        if (piece.getColor() == color) {
-            cntPawn += ifPawn(piece);
-            point += piece.getType().getDefaultPoint();
+    private double getPiecePoint(Piece piece, Piece.Color color) {
+        if (piece.equalsColor(color)) {
+            return piece.getType().getDefaultPoint();
         }
-        return new double[]{point, cntPawn};
+        return 0.0;
     }
 
-    private double ifPawn(Piece piece) {
-        if (piece.getType() == Piece.Type.PAWN) {
+    private double isPawn(Piece piece) {
+        if (piece.equalsType(Piece.Type.PAWN) && (piece.equalsColor(Piece.Color.WHITE))) {
             return 1.0;
         }
         return 0.0;

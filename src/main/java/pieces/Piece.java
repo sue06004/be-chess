@@ -177,7 +177,7 @@ public abstract class Piece implements Comparable<Piece> {
         }
         if (o instanceof Piece) {
             Piece piece = (Piece) o;
-            return color == piece.getColor() && type == piece.getType() && position.equals(piece.getPosition());
+            return color == piece.getColor() && type == piece.getType() && position == piece.getPosition();
         }
         return false;
     }

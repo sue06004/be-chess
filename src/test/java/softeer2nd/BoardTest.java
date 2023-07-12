@@ -16,29 +16,29 @@ public class BoardTest {
     private Board board;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         board = new Board();
     }
 
     @Test
     @DisplayName("체스판 초기화")
-    public void initalize(){
+    public void initalize() {
         board.initialize();
 
         String blankRank = appendNewLine("........");
         assertEquals(
-        appendNewLine("RNBQKBNR") +
-                appendNewLine("PPPPPPPP") +
-                blankRank + blankRank + blankRank + blankRank +
-                appendNewLine("pppppppp") +
-                appendNewLine("rnbqkbnr"),
-                ChessView.showBoard(board)
+                appendNewLine("RNBQKBNR") +
+                        appendNewLine("PPPPPPPP") +
+                        blankRank + blankRank + blankRank + blankRank +
+                        appendNewLine("pppppppp") +
+                        appendNewLine("rnbqkbnr"),
+                board.toString()
         );
     }
 
     @Test
     @DisplayName("빈 체스판 만들기")
-    public void initalizeEmpty(){
+    public void initalizeEmpty() {
         board.initializeEmpty();
 
         String blankRank = appendNewLine("........");
@@ -47,9 +47,10 @@ public class BoardTest {
                         blankRank + blankRank +
                         blankRank + blankRank +
                         blankRank + blankRank,
-                ChessView.showBoard(board)
+                board.toString()
         );
     }
+
     @Test
     @DisplayName("기물을 체스판 위에 추가")
     public void put() throws Exception {
@@ -62,7 +63,7 @@ public class BoardTest {
         board.put(pos, piece);
 
         assertEquals(piece, board.findPiece(position));
-        System.out.println(ChessView.showBoard(board));
+        ChessView.showBoard(board);
     }
 
     @Test
@@ -73,11 +74,20 @@ public class BoardTest {
         assertEquals(1, board.countPiece(Color.WHITE, Piece.Type.KING));
         assertEquals(8, board.countPiece(Color.WHITE, Piece.Type.PAWN));
     }
+
     @Test
-    @DisplayName("정렬 테스트")
-    public void 기물정렬() throws Exception{
+    @DisplayName("정렬 테스트 BLACk")
+    public void 기물정렬BLACk() throws Exception {
         board.initialize();
         Rank pieces = board.sort(Color.BLACK);
-        assertEquals("QRRBBNNPPPPPPPPK",pieces.toString());
+        assertEquals("QRRBBNNPPPPPPPPK", pieces.toString());
+    }
+
+    @Test
+    @DisplayName("정렬 테스트 WHITE")
+    public void 기물정렬WHITE() throws Exception {
+        board.initialize();
+        Rank pieces = board.sort(Color.WHITE);
+        assertEquals("qrrbbnnppppppppk", pieces.toString());
     }
 }
