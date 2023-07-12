@@ -26,8 +26,8 @@ class ChessGameTest {
     @DisplayName("체스판 위의 말의 점수 계산")
     void caculcatePoint() {
 
-        assertEquals(38.0, chessGame.caculcatePoint(Color.BLACK), 0.01);
-        assertEquals(38.0, chessGame.caculcatePoint(Color.WHITE), 0.01);
+        assertEquals(38.0, chessGame.calculatePoint(Color.BLACK), 0.01);
+        assertEquals(38.0, chessGame.calculatePoint(Color.WHITE), 0.01);
 
     }
 

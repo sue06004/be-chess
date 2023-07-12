@@ -65,6 +65,22 @@ public abstract class Piece implements Comparable<Piece> {
         return type;
     }
 
+    public char getWhiteRepresentation() {
+        return type.getWhiteRepresentation();
+    }
+
+    public char getBlankRepresentation() {
+        return type.getBlankRepresentation();
+    }
+
+    public char getBlackRepresentation() {
+        return type.getBlackRepresentation();
+    }
+
+    public double getDefaultPoint() {
+        return type.getDefaultPoint();
+    }
+
     public Color getColor() {
         return color;
     }
@@ -189,7 +205,7 @@ public abstract class Piece implements Comparable<Piece> {
 
     @Override
     public int compareTo(Piece p) {
-        return Double.compare(p.getType().getDefaultPoint(), type.getDefaultPoint());
+        return Double.compare(p.getDefaultPoint(), type.getDefaultPoint());
     }
 
 

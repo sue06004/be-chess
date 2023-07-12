@@ -11,6 +11,7 @@ public class Position {
         char x = pos.charAt(0);
         char y = pos.charAt(1);
 
+
         this.x = x - 'a';
         this.y = Character.getNumericValue(y);
     }

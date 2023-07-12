@@ -27,15 +27,15 @@ public class ChessGame {
         return false;
     }
 
-    public double caculcatePoint(Piece.Color color) {
+    public double calculatePoint(Piece.Color color) {
         double point = 0;
-        for (int file = 0; file < 8; file++) {
-            point += calcPointFile(file, color);
+        for (int file = 0; file < Board.BOARD_LENGTH; file++) {
+            point += calculatePointFile(file, color);
         }
         return point;
     }
 
-    private double calcPointFile(int file, Piece.Color color) {
+    private double calculatePointFile(int file, Piece.Color color) {
 
         double cntPawn = 0;
         double point = 0;
@@ -55,7 +55,7 @@ public class ChessGame {
 
     private double getPiecePoint(Piece piece, Piece.Color color) {
         if (piece.equalsColor(color)) {
-            return piece.getType().getDefaultPoint();
+            return piece.getDefaultPoint();
         }
         return 0.0;
     }

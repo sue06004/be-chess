@@ -1,11 +1,11 @@
 package softeer2nd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pieces.*;
 import utils.Position;
 import utils.Rank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static utils.StringUtils.appendNewLine;
 
@@ -15,7 +15,7 @@ public class Board {
     private List<Rank> rankList = new ArrayList<>();
 
     public void initializeEmpty() {
-        for (int rankIdx = 0; rankIdx < 8; rankIdx++) {
+        for (int rankIdx = 0; rankIdx < BOARD_LENGTH; rankIdx++) {
             Rank rank = new Rank();
             blankRank(rankIdx, rank);
             rankList.add(rank);
@@ -23,7 +23,7 @@ public class Board {
     }
 
     public void initialize() {
-        for (int rankIdx = 0; rankIdx < 8; rankIdx++) {
+        for (int rankIdx = 0; rankIdx < BOARD_LENGTH; rankIdx++) {
             initRank(rankIdx);
         }
     }
@@ -69,22 +69,22 @@ public class Board {
     }
 
     private void initBlackPawn(Rank rank) {
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_LENGTH; file++) {
             String pos = 'a' + file + "7";
             rank.add(Pawn.createBlack(Position.createPosition(pos)));
         }
     }
 
     private void initWhitePawn(Rank rank) {
-        for (int file = 0; file < 8; file++) {
+        for (int file = 0; file < BOARD_LENGTH; file++) {
             String pos = 'a' + file + "7";
             rank.add(Pawn.createWhite(Position.createPosition(pos)));
         }
     }
 
     private void blankRank(int y, Rank rank) {
-        for (int file = 0; file < 8; file++) {
-            String pos = 'a' + file + String.valueOf(8 - y);
+        for (int file = 0; file < BOARD_LENGTH; file++) {
+            String pos = 'a' + file + String.valueOf(BOARD_LENGTH - y);
             rank.add(Blank.createBlank(Position.createPosition(pos)));
         }
     }

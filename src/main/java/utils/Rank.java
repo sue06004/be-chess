@@ -31,10 +31,6 @@ public class Rank {
         return rank.get(idx);
     }
 
-    public List<Piece> getRank() {
-        return rank;
-    }
-
     public void sort() {
         Collections.sort(rank);
     }
@@ -50,9 +46,9 @@ public class Rank {
 
     private void pieceAppendStringBuilder(StringBuilder sb, Piece piece) {
         if (piece.isBlack()) {
-            sb.append(piece.getType().getBlackRepresentation());
+            sb.append(piece.getBlackRepresentation());
         } else {
-            sb.append(piece.getType().getWhiteRepresentation());
+            sb.append(piece.getWhiteRepresentation());
         }
     }
 
