@@ -17,7 +17,13 @@ public abstract class Piece implements Comparable<Piece> {
     }
 
     public enum Type {
-        PAWN('p', 1.0), ROOK('r', 5.0), KNIGHT('n', 2.5), BISHOP('b', 3.0), QUEEN('q', 9.0), KING('k', 0.0), NO_PIECE('.', 0.0);
+        PAWN('p', 1.0),
+        ROOK('r', 5.0),
+        KNIGHT('n', 2.5),
+        BISHOP('b', 3.0),
+        QUEEN('q', 9.0),
+        KING('k', 0.0),
+        NO_PIECE('.', 0.0);
 
         private char representation;
         private double defaultPoint;
@@ -60,28 +66,27 @@ public abstract class Piece implements Comparable<Piece> {
     }
 
     public Color getColor() {
-        return this.color;
+        return color;
     }
 
     public Position getPosition() {
-        return this.position;
+        return position;
     }
 
     public void setPosition(Position pos) {
-        this.position = pos;
+        position = pos;
     }
 
-
     public boolean isBlack() {
-        return color.equals(Color.BLACK);
+        return color == Color.BLACK;
     }
 
     public boolean isWhite() {
-        return color.equals(Color.WHITE);
+        return color == Color.WHITE;
     }
 
     public boolean isBlank() {
-        return color.equals(Color.NOCOLOR);
+        return color == Color.NOCOLOR;
     }
 
     public abstract boolean verifyMovePosition(Board board, Position pos);
@@ -96,7 +101,7 @@ public abstract class Piece implements Comparable<Piece> {
             Direction dir = Direction.valueOf(xDir, yDir);
             List<Direction> dirList = getDirectionList(type);
             if (dirList.contains(dir)) {
-                Position newPos = Position.createPosition(String.valueOf((char) ('a' + sourcePosition.getX() + xDir)) + String.valueOf(sourcePosition.getY() + yDir));
+                Position newPos = Position.createPosition((char) ('a' + sourcePosition.getX() + xDir) + String.valueOf(sourcePosition.getY() + yDir));
                 return !equalsColor(targetPiece.getColor()) && board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
             }
         }
@@ -117,29 +122,52 @@ public abstract class Piece implements Comparable<Piece> {
         } else if (type == Type.PAWN && isWhite()) {
             return Direction.whitePawnDirection();
         }
-        return new ArrayList<Direction>();
+        return new ArrayList<>();
     }
+
     private int getXDirection(Position sourcePosition, Position targetPosition) {
         if (type == Type.KNIGHT || type == Type.KING) {
             return targetPosition.getX() - sourcePosition.getX();
         } else if (type == Type.QUEEN || type == Type.ROOK || type == Type.BISHOP) {
-            return targetPosition.getX() - sourcePosition.getX() == 0 ? 0 : (targetPosition.getX() - sourcePosition.getX()) / abs(targetPosition.getX() - sourcePosition.getX());
+            return calculateXDirection(sourcePosition, targetPosition);
         }
         return 0;
     }
+
+    private int calculateXDirection(Position sourcePosition, Position targetPosition) {
+        if (targetPosition.getX() - sourcePosition.getX() == 0) {
+            return 0;
+        } else {
+            return (targetPosition.getX() - sourcePosition.getX()) / abs(targetPosition.getX() - sourcePosition.getX());
+        }
+    }
+
     private int getYDirection(Position sourcePosition, Position targetPosition) {
         if (type == Type.KNIGHT || type == Type.KING) {
             return targetPosition.getY() - sourcePosition.getY();
         } else if (type == Type.QUEEN || type == Type.ROOK || type == Type.BISHOP) {
-            return targetPosition.getY() - sourcePosition.getY() == 0 ? 0 : (targetPosition.getY() - sourcePosition.getY()) / abs(targetPosition.getY() - sourcePosition.getY());
+            return calculateYDirection(sourcePosition, targetPosition);
         }
         return 0;
+    }
+
+    private int calculateYDirection(Position sourcePosition, Position targetPosition) {
+        if (targetPosition.getY() - sourcePosition.getY() == 0) {
+            return 0;
+        } else {
+            return (targetPosition.getY() - sourcePosition.getY()) / abs(targetPosition.getY() - sourcePosition.getY());
+        }
     }
 
     public boolean equalsColor(Color color) {
         return this.color == color;
     }
 
+    public boolean equalsType(Type type) {
+        return this.type == type;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -152,6 +180,11 @@ public abstract class Piece implements Comparable<Piece> {
             return color == piece.getColor() && type == piece.getType() && position.equals(piece.getPosition());
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, type, position);
     }
 
     @Override

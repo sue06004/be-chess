@@ -70,8 +70,8 @@ public class BoardTest {
     public void pieceCount() {
         board.initialize();
 
-        assertEquals(1, board.pieceCount(Color.WHITE, Piece.Type.KING));
-        assertEquals(8, board.pieceCount(Color.WHITE, Piece.Type.PAWN));
+        assertEquals(1, board.countPiece(Color.WHITE, Piece.Type.KING));
+        assertEquals(8, board.countPiece(Color.WHITE, Piece.Type.PAWN));
     }
     @Test
     @DisplayName("정렬 테스트")

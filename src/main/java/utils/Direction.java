@@ -21,12 +21,12 @@ public enum Direction {
     EES(2, -1),
     WWN(-2, 1),
     WWS(-2, -1),
-    NON_DIRECTION(0,0);
+    NON_DIRECTION(0, 0);
 
     private int xDegree;
     private int yDegree;
 
-    private Direction(int xDegree, int yDegree) {
+    Direction(int xDegree, int yDegree) {
         this.xDegree = xDegree;
         this.yDegree = yDegree;
     }
@@ -63,39 +63,13 @@ public enum Direction {
         return Arrays.asList(SOUTH, SOUTHEAST, SOUTHWEST);
     }
 
+
     public static Direction valueOf(int xDegree, int yDegree) {
-        if (xDegree == 0 && yDegree == 1) {
-            return NORTH;
-        } else if (xDegree == 1 && yDegree == 1) {
-            return NORTHEAST;
-        } else if (xDegree == 1 && yDegree ==0){
-            return EAST;
-        } else if (xDegree == 1 && yDegree == -1){
-            return SOUTHEAST;
-        } else if (xDegree == 0 && yDegree == -1){
-            return SOUTH;
-        } else if (xDegree == -1 && yDegree == -1){
-            return SOUTHWEST;
-        } else if (xDegree == -1 && yDegree ==0){
-            return WEST;
-        } else if (xDegree == -1 && yDegree ==1 ){
-            return NORTHWEST;
-        } else if (xDegree == 1 && yDegree==2){
-            return NNE;
-        } else if (xDegree == 2 && yDegree== 1){
-            return EEN;
-        } else if (xDegree == 1 && yDegree == -2){
-            return SSE;
-        } else if (xDegree == -2 && yDegree == -1){
-            return WWS;
-        } else if (xDegree == -1 && yDegree == 2){
-            return NNW;
-        } else if (xDegree == -1 && yDegree == -2){
-            return SSW;
-        } else if (xDegree == -2 && yDegree == 1){
-            return WWN;
-        } else if (xDegree == 2 && yDegree== -1) {
-            return EES;
+        Direction[] values = Direction.values();
+        for (Direction direction : values) {
+            if (direction.getXDegree() == xDegree && direction.getYDegree() == yDegree) {
+                return direction;
+            }
         }
         return NON_DIRECTION;
     }

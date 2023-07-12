@@ -5,58 +5,60 @@ import java.util.Collections;
 import java.util.List;
 
 import pieces.Piece;
+
 public class Rank {
 
     List<Piece> rank;
 
-    public Rank(){
-        this.rank = new ArrayList<Piece>();
+    public Rank() {
+        this.rank = new ArrayList<>();
     }
 
-    public void add(Piece piece){
-        this.rank.add(piece);
+    public void add(Piece piece) {
+        rank.add(piece);
     }
+
     public void set(int idx, Piece piece) {
-        this.rank.set(idx,piece);
+        rank.set(idx, piece);
     }
-    public Piece get(int idx){
+
+    public Piece get(int idx) {
         return rank.get(idx);
     }
-    public List<Piece> getRank(){
+
+    public List<Piece> getRank() {
         return rank;
     }
 
-    public void sort(){
+    public void sort() {
         Collections.sort(rank);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(Piece p : this.rank){
-            pieceAppendSb(sb,p);
+        for (Piece p : this.rank) {
+            pieceAppendStringBuilder(sb, p);
         }
         return sb.toString();
     }
-    private void pieceAppendSb(StringBuilder sb, Piece piece){
-        if(piece.isBlack()){
-            sb.append(String.valueOf(piece.getType().getBlackRepresentation()));
-        }
-        else{
-            sb.append(String.valueOf(piece.getType().getWhiteRepresentation()));
+
+    private void pieceAppendStringBuilder(StringBuilder sb, Piece piece) {
+        if (piece.isBlack()) {
+            sb.append(piece.getType().getBlackRepresentation());
+        } else {
+            sb.append(piece.getType().getWhiteRepresentation());
         }
     }
 
-    public int cntPiece(Piece.Color color, Piece.Type type){
-        int cnt=0;
-        for (Piece piece : rank){
-            cnt += (piece.getColor()==color && piece.getType()==type) ? 1:0;
-        }
-        return cnt;
+    public int count(Piece.Color color, Piece.Type type) {
+        return (int) rank.stream()
+                .filter(piece -> piece.equalsColor(color) && piece.equalsType(type))
+                .count();
     }
 
-    public void addEqualColor(Rank pieces, Piece.Color color){
+    public void addEqualColor(Rank pieces, Piece.Color color) {
         pieces.getRank().stream().filter(piece -> piece.equalsColor(color))
-                .forEach(rank :: add);
+                .forEach(rank::add);
     }
 
 }

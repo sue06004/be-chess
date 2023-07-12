@@ -1,11 +1,7 @@
 package pieces;
 
 import softeer2nd.Board;
-import utils.Direction;
 import utils.Position;
-import pieces.Piece;
-
-import static java.lang.Math.abs;
 
 public class Rook extends Piece {
     private Rook(Color color, Type type, Position pos) {

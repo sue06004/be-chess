@@ -1,10 +1,7 @@
 package pieces;
 
 import softeer2nd.Board;
-import utils.Direction;
 import utils.Position;
-
-import static java.lang.Math.abs;
 
 public class Knight extends Piece {
     private Knight(Color color, Type type, Position pos) {
