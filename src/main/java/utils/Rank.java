@@ -20,7 +20,7 @@ public class Rank {
     public static Rank createBlankRank(int rankIdx) {
         Rank rank = new Rank();
         for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + String.valueOf(BOARD_LENGTH - rankIdx);
+            String pos = (char) ('a' + file) + String.valueOf(BOARD_LENGTH - rankIdx);
             rank.add(Blank.createBlank(Position.createPosition(pos)));
         }
         return rank;
@@ -29,7 +29,7 @@ public class Rank {
     public static Rank createBlackPawnRank() {
         Rank rank = new Rank();
         for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + "7";
+            String pos = (char) ('a' + file) + "7";
             rank.add(Pawn.createBlack(Position.createPosition(pos)));
         }
         return rank;
@@ -38,7 +38,7 @@ public class Rank {
     public static Rank createWhitePawnRank() {
         Rank rank = new Rank();
         for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + "7";
+            String pos = (char) ('a' + file) + "2";
             rank.add(Pawn.createWhite(Position.createPosition(pos)));
         }
         return rank;

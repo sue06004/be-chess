@@ -26,7 +26,9 @@ public class Main {
                     System.out.println("'move a1 c3' 와 같이 입력해주세요");
                     continue;
                 }
-                chessGame.move(pos[1], pos[2]);
+                if(!chessGame.move(pos[1], pos[2])){
+                    System.out.println("이동할 수 없는 지역입니다.");
+                }
                 ChessView.showBoard(board);
             } else {
                 System.out.println("잘못된 명령을 입력하였습니다.");

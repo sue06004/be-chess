@@ -22,9 +22,8 @@ public class BoardTest {
 
     @Test
     @DisplayName("체스판 초기화")
-    public void initalize() {
+    public void initialize() {
         board.initialize();
-
         String blankRank = appendNewLine("........");
         assertEquals(
                 appendNewLine("RNBQKBNR") +
@@ -38,9 +37,11 @@ public class BoardTest {
 
     @Test
     @DisplayName("빈 체스판 만들기")
-    public void initalizeEmpty() {
+    public void initializeEmpty() {
         board.initializeEmpty();
-
+        Piece piece = board.findPiece("a2");
+        System.out.println(piece.getPosition().getX());
+        System.out.println(piece.getPosition().getY());
         String blankRank = appendNewLine("........");
         assertEquals(
                 blankRank + blankRank +
@@ -77,7 +78,7 @@ public class BoardTest {
 
     @Test
     @DisplayName("정렬 테스트 BLACk")
-    public void 기물정렬BLACk() throws Exception {
+    public void sortBlack() throws Exception {
         board.initialize();
         Rank pieces = board.sort(Color.BLACK);
         assertEquals("QRRBBNNPPPPPPPPK", pieces.toString());
@@ -85,7 +86,7 @@ public class BoardTest {
 
     @Test
     @DisplayName("정렬 테스트 WHITE")
-    public void 기물정렬WHITE() throws Exception {
+    public void sortWhite() throws Exception {
         board.initialize();
         Rank pieces = board.sort(Color.WHITE);
         assertEquals("qrrbbnnppppppppk", pieces.toString());
