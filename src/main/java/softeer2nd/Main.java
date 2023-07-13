@@ -8,6 +8,7 @@ public class Main {
         Board board = new Board();
         Scanner in = new Scanner(System.in);
         String cmd;
+
         while (true) {
             System.out.printf("명령: ");
             cmd = in.nextLine();
