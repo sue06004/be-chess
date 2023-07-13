@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import pieces.*;
 import utils.Position;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static pieces.Piece.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static pieces.Piece.Color;
 
 class ChessGameTest {
 

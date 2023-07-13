@@ -11,9 +11,10 @@ public class BishopTest {
 
     @Test
     @DisplayName("비숍 피스 테스트")
-    void createKing(){
-        verifyPiece(Bishop.createWhite(Position.createPosition("a1")), Bishop.createBlack(Position.createPosition("a1")), Piece.Type.BISHOP,"a1");
+    void createKing() {
+        verifyPiece(Bishop.createWhite(Position.createPosition("a1")), Bishop.createBlack(Position.createPosition("a1")), Piece.Type.BISHOP, "a1");
     }
+
     private void verifyPiece(final Piece whitePiece, final Piece blackPiece, final Piece.Type type, String pos) {
         assertTrue(whitePiece.isWhite());
         assertEquals(type, whitePiece.getType());

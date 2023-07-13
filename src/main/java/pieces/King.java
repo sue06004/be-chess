@@ -1,7 +1,7 @@
 package pieces;
 
-import utils.Position;
 import softeer2nd.Board;
+import utils.Position;
 
 public class King extends Piece {
 

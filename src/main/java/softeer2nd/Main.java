@@ -22,7 +22,7 @@ public class Main {
             } else if (cmd.startsWith("move")) {
                 ChessGame chessGame = ChessGame.createChessGame(board);
                 String[] pos = cmd.split(" ");
-                if (pos.length != 3){
+                if (pos.length != 3) {
                     System.out.println("'move a1 c3' 와 같이 입력해주세요");
                     continue;
                 }

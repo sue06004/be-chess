@@ -109,7 +109,7 @@ public abstract class Piece implements Comparable<Piece> {
 
     protected boolean verifyMovePossible(Board board, Position targetPosition) {
         Position sourcePosition = getPosition();
-        if (board.checkBoundary(targetPosition)) {
+        if (Position.checkBoundary(targetPosition)) {
             Piece targetPiece = board.findPiece(targetPosition);
             int xDir = getXDirection(sourcePosition, targetPosition);
             int yDir = getYDirection(sourcePosition, targetPosition);
@@ -207,6 +207,5 @@ public abstract class Piece implements Comparable<Piece> {
     public int compareTo(Piece p) {
         return Double.compare(p.getDefaultPoint(), type.getDefaultPoint());
     }
-
 
 }

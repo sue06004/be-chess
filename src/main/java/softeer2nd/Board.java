@@ -1,6 +1,7 @@
 package softeer2nd;
 
-import pieces.*;
+import pieces.Blank;
+import pieces.Piece;
 import utils.Position;
 import utils.Rank;
 
@@ -12,81 +13,25 @@ import static utils.StringUtils.appendNewLine;
 public class Board {
 
     public final static int BOARD_LENGTH = 8;
+    private final int BLACK_PAWN_INIT_IDX = 1;
+    private final int BLACK_PIECE_INIT_IDX = 0;
+    private final int WHITE_PAWN_INIT_IDX = 6;
+    private final int WHITE_PIECE_INIT_IDX = 7;
     private List<Rank> rankList = new ArrayList<>();
 
     public void initializeEmpty() {
         for (int rankIdx = 0; rankIdx < BOARD_LENGTH; rankIdx++) {
-            Rank rank = new Rank();
-            blankRank(rankIdx, rank);
-            rankList.add(rank);
+            rankList.add(Rank.createBlankRank(rankIdx));
         }
     }
 
     public void initialize() {
-        for (int rankIdx = 0; rankIdx < BOARD_LENGTH; rankIdx++) {
-            initRank(rankIdx);
-        }
-    }
+        initializeEmpty();
+        rankList.set(BLACK_PAWN_INIT_IDX, Rank.createBlackPawnRank());
+        rankList.set(BLACK_PIECE_INIT_IDX, Rank.createBlackInitRank());
+        rankList.set(WHITE_PAWN_INIT_IDX, Rank.createWhitePawnRank());
+        rankList.set(WHITE_PIECE_INIT_IDX, Rank.createWhiteInitRank());
 
-    private void initRank(int rankIdx) {
-        Rank rank = new Rank();
-
-        if (rankIdx == 0) {
-            initBlackNotPawn(rank);
-        } else if (rankIdx == 1) {
-            initBlackPawn(rank);
-        } else if (rankIdx == 6) {
-            initWhitePawn(rank);
-        } else if (rankIdx == 7) {
-            initWhiteNotPawn(rank);
-        } else {
-            blankRank(rankIdx, rank);
-        }
-
-        rankList.add(rank);
-    }
-
-    private void initBlackNotPawn(Rank rank) {
-        rank.add(Rook.createBlack(Position.createPosition("a8")));
-        rank.add(Knight.createBlack(Position.createPosition("b8")));
-        rank.add(Bishop.createBlack(Position.createPosition("c8")));
-        rank.add(Queen.createBlack(Position.createPosition("d8")));
-        rank.add(King.createBlack(Position.createPosition("e8")));
-        rank.add(Bishop.createBlack(Position.createPosition("f8")));
-        rank.add(Knight.createBlack(Position.createPosition("g8")));
-        rank.add(Rook.createBlack(Position.createPosition("h8")));
-    }
-
-    private void initWhiteNotPawn(Rank rank) {
-        rank.add(Rook.createWhite(Position.createPosition("a1")));
-        rank.add(Knight.createWhite(Position.createPosition("b1")));
-        rank.add(Bishop.createWhite(Position.createPosition("c1")));
-        rank.add(Queen.createWhite(Position.createPosition("d1")));
-        rank.add(King.createWhite(Position.createPosition("e1")));
-        rank.add(Bishop.createWhite(Position.createPosition("f1")));
-        rank.add(Knight.createWhite(Position.createPosition("g1")));
-        rank.add(Rook.createWhite(Position.createPosition("h1")));
-    }
-
-    private void initBlackPawn(Rank rank) {
-        for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + "7";
-            rank.add(Pawn.createBlack(Position.createPosition(pos)));
-        }
-    }
-
-    private void initWhitePawn(Rank rank) {
-        for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + "7";
-            rank.add(Pawn.createWhite(Position.createPosition(pos)));
-        }
-    }
-
-    private void blankRank(int y, Rank rank) {
-        for (int file = 0; file < BOARD_LENGTH; file++) {
-            String pos = 'a' + file + String.valueOf(BOARD_LENGTH - y);
-            rank.add(Blank.createBlank(Position.createPosition(pos)));
-        }
     }
 
     public Rank sort(Piece.Color color) {
@@ -131,9 +76,7 @@ public class Board {
         targetRank.set(targetPosition.getX(), sourcePiece);
     }
 
-    public static boolean checkBoundary(Position pos) {
-        return pos.getY() > 0 && pos.getY() <= BOARD_LENGTH && pos.getX() >= 0 && pos.getX() < BOARD_LENGTH;
-    }
+
 
     public boolean checkOtherPiece(Position pos, Position targetPos, int xDir, int yDir) {
         if (pos.equals(targetPos)) {

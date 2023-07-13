@@ -20,7 +20,7 @@ public class Pawn extends Piece {
     @Override
     public boolean verifyMovePosition(Board board, Position targetPosition) {
         Position sourcePosition = getPosition();
-        if (Board.checkBoundary(targetPosition)) {
+        if (Position.checkBoundary(targetPosition)) {
             Piece targetPiece = board.findPiece(targetPosition);
             int xDir = targetPosition.getX() - sourcePosition.getX();
             int yDir = targetPosition.getY() - sourcePosition.getY();

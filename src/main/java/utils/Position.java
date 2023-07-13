@@ -2,6 +2,8 @@ package utils;
 
 import java.util.Objects;
 
+import static softeer2nd.Board.BOARD_LENGTH;
+
 public class Position {
 
     private int x;
@@ -26,6 +28,10 @@ public class Position {
 
     public int getY() {
         return y;
+    }
+
+    public static boolean checkBoundary(Position pos) {
+        return pos.getY() > 0 && pos.getY() <= BOARD_LENGTH && pos.getX() >= 0 && pos.getX() < BOARD_LENGTH;
     }
 
     @Override
