@@ -122,7 +122,7 @@ public abstract class Piece implements Comparable<Piece> {
             throw new WrongDirectionException();
         }
         Position newPos = Position.createPosition((char) ('a' + sourcePosition.getX() + xDir) + String.valueOf(sourcePosition.getY() + yDir));
-        if(equalsColor(targetPiece.getColor())){
+        if (equalsColor(targetPiece.getColor())) {
             throw new OccupiedSameColorPiece();
         }
         board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
@@ -155,10 +155,14 @@ public abstract class Piece implements Comparable<Piece> {
     }
 
     private int calculateXDirection(Position sourcePosition, Position targetPosition) {
-        if (targetPosition.getX() - sourcePosition.getX() == 0) {
-            return 0;
+        int distanceX = targetPosition.getX() - sourcePosition.getX();
+        int distanceY = targetPosition.getY() - sourcePosition.getY();
+        if (distanceX == 0) {
+            return distanceX;
+        } else if (abs(distanceX) == abs(distanceY) || distanceY == 0) {
+            return distanceX / abs(distanceX);
         } else {
-            return (targetPosition.getX() - sourcePosition.getX()) / abs(targetPosition.getX() - sourcePosition.getX());
+            return distanceX;
         }
     }
 
@@ -172,10 +176,14 @@ public abstract class Piece implements Comparable<Piece> {
     }
 
     private int calculateYDirection(Position sourcePosition, Position targetPosition) {
-        if (targetPosition.getY() - sourcePosition.getY() == 0) {
-            return 0;
+        int distanceX = targetPosition.getX() - sourcePosition.getX();
+        int distanceY = targetPosition.getY() - sourcePosition.getY();
+        if (distanceY == 0) {
+            return distanceY;
+        } else if (abs(distanceX) == abs(distanceY) || distanceX == 0) {
+            return distanceY / abs(distanceY);
         } else {
-            return (targetPosition.getY() - sourcePosition.getY()) / abs(targetPosition.getY() - sourcePosition.getY());
+            return distanceY;
         }
     }
 
