@@ -2,7 +2,11 @@ package pieces;
 
 import exceptions.BlankMoveException;
 import softeer2nd.Board;
+import utils.Direction;
 import utils.Position;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Blank extends Piece {
 
@@ -14,8 +18,13 @@ public class Blank extends Piece {
         return new Blank(Color.NOCOLOR, Type.NO_PIECE, pos);
     }
 
+    @Override
     public void verifyMovePosition(Board board, Position targetPosition) {
         throw new BlankMoveException();
     }
 
+    @Override
+    public List<Direction> getDirectionList() {
+        return new ArrayList<>();
+    }
 }

@@ -5,6 +5,7 @@ import pieces.Blank;
 import pieces.Piece;
 import utils.Position;
 import utils.Rank;
+import utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ import static utils.StringUtils.appendNewLine;
 public class Board {
 
     public final static int BOARD_LENGTH = 8;
-    private final int BLACK_PAWN_INIT_IDX = 1;
-    private final int BLACK_PIECE_INIT_IDX = 0;
-    private final int WHITE_PAWN_INIT_IDX = 6;
-    private final int WHITE_PIECE_INIT_IDX = 7;
+    private final static int BLACK_PAWN_INIT_IDX = 1;
+    private final static int BLACK_PIECE_INIT_IDX = 0;
+    private final static int WHITE_PAWN_INIT_IDX = 6;
+    private final static int WHITE_PIECE_INIT_IDX = 7;
     private List<Rank> rankList = new ArrayList<>();
 
     public void initializeEmpty() {
@@ -78,16 +79,18 @@ public class Board {
     }
 
 
-    public void checkOtherPiece(Position pos, Position targetPos, int xDir, int yDir) {
-        if (pos.equals(targetPos)) {
+    public void checkOtherPiece(Position sourcePosition, Position targetPosition, int xDir, int yDir) {
+        String strPosition = StringUtils.createStringPosition(sourcePosition.getX() + xDir, sourcePosition.getY() + yDir);
+        Position position = Position.createPosition(strPosition);
+
+        if (position.equals(targetPosition)) {
             return;
         }
-        Piece piece = findPiece(pos);
+        Piece piece = findPiece(position);
         if (!piece.isBlank()) {
             throw new OccupiedPathException();
         }
-        Position newPos = Position.createPosition((char) ('a' + pos.getX() + xDir) + String.valueOf(pos.getY() + yDir));
-        checkOtherPiece(newPos, targetPos, xDir, yDir);
+        checkOtherPiece(position, targetPosition, xDir, yDir);
     }
 
     public int countPiece(Piece.Color color, Piece.Type type) {

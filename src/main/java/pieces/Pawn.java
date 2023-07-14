@@ -8,6 +8,8 @@ import softeer2nd.Board;
 import utils.Direction;
 import utils.Position;
 
+import java.util.List;
+
 public class Pawn extends Piece {
     private Pawn(Color color, Type type, Position pos) {
         super(color, type, pos);
@@ -39,12 +41,12 @@ public class Pawn extends Piece {
             if (targetPiece.isBlank()) {
                 throw new NotFoundEnemyException();
             }
-            if(equalsColor(targetPiece.getColor())){
+            if (equalsColor(targetPiece.getColor())) {
                 throw new OccupiedSameColorPiece();
             }
             return;
         } else if (isWhite() && dir == Direction.NORTH) {
-            if (!targetPiece.isBlank()){
+            if (!targetPiece.isBlank()) {
                 throw new OccupiedPathException();
             }
             return;
@@ -52,11 +54,19 @@ public class Pawn extends Piece {
             if (targetPiece.isBlank()) {
                 throw new NotFoundEnemyException();
             }
-            if(equalsColor(targetPiece.getColor())){
+            if (equalsColor(targetPiece.getColor())) {
                 throw new OccupiedSameColorPiece();
             }
             return;
         }
         throw new WrongDirectionException();
+    }
+
+    @Override
+    public List<Direction> getDirectionList() {
+        if (isBlack()) {
+            return Direction.blackPawnDirection();
+        }
+        return Direction.whitePawnDirection();
     }
 }

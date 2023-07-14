@@ -1,7 +1,9 @@
 package pieces;
 
-import softeer2nd.Board;
+import utils.Direction;
 import utils.Position;
+
+import java.util.List;
 
 public class King extends Piece {
 
@@ -17,8 +19,8 @@ public class King extends Piece {
         return new King(Color.WHITE, Type.KING, pos);
     }
 
-
-    public void verifyMovePosition(Board board, Position targetPosition) {
-        verifyMovePossible(board, targetPosition);
+    @Override
+    public List<Direction> getDirectionList() {
+        return Direction.everyDirection();
     }
 }

@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 class ChessViewTest {
 
     Board board;
-    ChessView cv;
+    ChessView chessView;
     @BeforeEach
     public void setup(){
         board = new Board();
-
+        chessView = ChessView.createChessView(board);
     }
 
     @Test
     @DisplayName("ChessView 테스트")
     void showBoard() {
         board.initialize();
-        cv.showBoard(board);
+        chessView.showBoard();
     }
 }

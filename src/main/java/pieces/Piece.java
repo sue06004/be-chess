@@ -5,9 +5,7 @@ import exceptions.WrongDirectionException;
 import softeer2nd.Board;
 import utils.Direction;
 import utils.Position;
-import utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -108,44 +106,35 @@ public abstract class Piece implements Comparable<Piece> {
         return color == Color.NOCOLOR;
     }
 
-    public abstract void verifyMovePosition(Board board, Position pos);
-
-    protected void verifyMovePossible(Board board, Position targetPosition) {
+    public void verifyMovePosition(Board board, Position targetPosition) {
         Position sourcePosition = getPosition();
         Position.checkBoundary(targetPosition);
-        Piece targetPiece = board.findPiece(targetPosition);
         int xDir = getXDirection(sourcePosition, targetPosition);
         int yDir = getYDirection(sourcePosition, targetPosition);
+        checkDirection(xDir, yDir);
 
+        Piece targetPiece = board.findPiece(targetPosition);
+        checkTargetColor(targetPiece);
+
+        board.checkOtherPiece(sourcePosition, targetPosition, xDir, yDir);
+    }
+
+    private void checkDirection(int xDir, int yDir) {
         Direction dir = Direction.valueOf(xDir, yDir);
-        List<Direction> dirList = getDirectionList(type);
+        List<Direction> dirList = getDirectionList();
         if (!dirList.contains(dir)) {
             throw new WrongDirectionException();
         }
-        String strPosition = StringUtils.createStringPosition(sourcePosition.getX() + xDir, sourcePosition.getY() + yDir);
-        Position newPosition = Position.createPosition(strPosition);
+    }
+
+    private void checkTargetColor(Piece targetPiece) {
         if (equalsColor(targetPiece.getColor())) {
             throw new OccupiedSameColorPiece();
         }
-        board.checkOtherPiece(newPosition, targetPosition, xDir, yDir);
     }
 
-    private List<Direction> getDirectionList(Type type) {
-        if (type == Type.KING || type == Type.QUEEN) {
-            return Direction.everyDirection();
-        } else if (type == Type.ROOK) {
-            return Direction.linearDirection();
-        } else if (type == Type.BISHOP) {
-            return Direction.diagonalDirection();
-        } else if (type == Type.KNIGHT) {
-            return Direction.knightDirection();
-        } else if (type == Type.PAWN && isBlack()) {
-            return Direction.blackPawnDirection();
-        } else if (type == Type.PAWN && isWhite()) {
-            return Direction.whitePawnDirection();
-        }
-        return new ArrayList<>();
-    }
+    public abstract List<Direction> getDirectionList();
+
 
     private int getXDirection(Position sourcePosition, Position targetPosition) {
         if (type == Type.KNIGHT || type == Type.KING) {

@@ -14,10 +14,12 @@ import static utils.StringUtils.appendNewLine;
 
 public class BoardTest {
     private Board board;
+    private ChessView chessView;
 
     @BeforeEach
     public void setup() {
         board = new Board();
+        chessView = ChessView.createChessView(board);
     }
 
     @Test
@@ -64,7 +66,7 @@ public class BoardTest {
         board.put(pos, piece);
 
         assertEquals(piece, board.findPiece(position));
-        ChessView.showBoard(board);
+        chessView.showBoard();
     }
 
     @Test

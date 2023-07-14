@@ -1,7 +1,9 @@
 package pieces;
 
-import softeer2nd.Board;
+import utils.Direction;
 import utils.Position;
+
+import java.util.List;
 
 public class Rook extends Piece {
     private Rook(Color color, Type type, Position pos) {
@@ -17,7 +19,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public void verifyMovePosition(Board board, Position targetPosition) {
-        verifyMovePossible(board, targetPosition);
+    public List<Direction> getDirectionList() {
+        return Direction.linearDirection();
     }
 }

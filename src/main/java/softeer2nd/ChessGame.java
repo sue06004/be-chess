@@ -22,14 +22,29 @@ public class ChessGame {
         Position targetPosition = Position.createPosition(targetPos);
 
         Piece sourcePiece = board.findPiece(sourcePos);
-        if (!sourcePiece.equalsColor(turn)) {
-            throw new TurnException();
-        }
+        checkTurn(sourcePiece);
         sourcePiece.verifyMovePosition(board, targetPosition);
         board.moving(sourcePosition, targetPosition);
+
         nextTurn();
         return true;
     }
+
+    private void checkTurn(Piece sourcePiece) {
+        if (!sourcePiece.equalsColor(turn)) {
+            throw new TurnException();
+        }
+    }
+
+    public void nextTurn() {
+        if (turn == Piece.Color.WHITE) {
+            turn = Piece.Color.BLACK;
+        } else {
+            turn = Piece.Color.WHITE;
+        }
+
+    }
+
     //테스트 용도
     public boolean moveExceptTurn(String sourcePos, String targetPos) {
         Position sourcePosition = Position.createPosition(sourcePos);
@@ -83,12 +98,5 @@ public class ChessGame {
         return 0.0;
     }
 
-    public void nextTurn() {
-        if (turn == Piece.Color.WHITE) {
-            turn = Piece.Color.BLACK;
-        } else {
-            turn = Piece.Color.WHITE;
-        }
 
-    }
 }
