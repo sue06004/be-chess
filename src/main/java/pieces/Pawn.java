@@ -1,5 +1,9 @@
 package pieces;
 
+import exceptions.NotFoundEnemyException;
+import exceptions.OccupiedPathException;
+import exceptions.OccupiedSameColorPiece;
+import exceptions.WrongDirectionException;
 import softeer2nd.Board;
 import utils.Direction;
 import utils.Position;
@@ -18,24 +22,41 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean verifyMovePosition(Board board, Position targetPosition) {
+    public void verifyMovePosition(Board board, Position targetPosition) {
         Position sourcePosition = getPosition();
-        if (Position.checkBoundary(targetPosition)) {
-            Piece targetPiece = board.findPiece(targetPosition);
-            int xDir = targetPosition.getX() - sourcePosition.getX();
-            int yDir = targetPosition.getY() - sourcePosition.getY();
+        Position.checkBoundary(targetPosition);
+        Piece targetPiece = board.findPiece(targetPosition);
+        int xDir = targetPosition.getX() - sourcePosition.getX();
+        int yDir = targetPosition.getY() - sourcePosition.getY();
 
-            Direction dir = Direction.valueOf(xDir, yDir);
-            if (isBlack() && dir == Direction.SOUTH) {
-                return targetPiece.isBlank();
-            } else if (isBlack() && Direction.blackPawnDirection().contains(dir)) {
-                return !equalsColor(targetPiece.getColor());
-            } else if (isWhite() && dir == Direction.NORTH) {
-                return targetPiece.isBlank();
-            } else if (isWhite() && Direction.whitePawnDirection().contains(dir)) {
-                return !equalsColor(targetPiece.getColor());
+        Direction dir = Direction.valueOf(xDir, yDir);
+        if (isBlack() && dir == Direction.SOUTH) {
+            if (!targetPiece.isBlank()) {
+                throw new OccupiedPathException();
             }
+            return;
+        } else if (isBlack() && Direction.blackPawnDirection().contains(dir)) {
+            if (targetPiece.isBlank()) {
+                throw new NotFoundEnemyException();
+            }
+            if(equalsColor(targetPiece.getColor())){
+                throw new OccupiedSameColorPiece();
+            }
+            return;
+        } else if (isWhite() && dir == Direction.NORTH) {
+            if (!targetPiece.isBlank()){
+                throw new OccupiedPathException();
+            }
+            return;
+        } else if (isWhite() && Direction.whitePawnDirection().contains(dir)) {
+            if (targetPiece.isBlank()) {
+                throw new NotFoundEnemyException();
+            }
+            if(equalsColor(targetPiece.getColor())){
+                throw new OccupiedSameColorPiece();
+            }
+            return;
         }
-        return false;
+        throw new WrongDirectionException();
     }
 }

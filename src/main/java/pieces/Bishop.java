@@ -18,7 +18,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean verifyMovePosition(Board board, Position targetPosition) {
-        return verifyMovePossible(board, targetPosition);
+    public void verifyMovePosition(Board board, Position targetPosition) {
+        verifyMovePossible(board, targetPosition);
     }
 }

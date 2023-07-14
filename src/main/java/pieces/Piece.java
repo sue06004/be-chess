@@ -1,5 +1,7 @@
 package pieces;
 
+import exceptions.OccupiedSameColorPiece;
+import exceptions.WrongDirectionException;
 import softeer2nd.Board;
 import utils.Direction;
 import utils.Position;
@@ -105,23 +107,25 @@ public abstract class Piece implements Comparable<Piece> {
         return color == Color.NOCOLOR;
     }
 
-    public abstract boolean verifyMovePosition(Board board, Position pos);
+    public abstract void verifyMovePosition(Board board, Position pos);
 
-    protected boolean verifyMovePossible(Board board, Position targetPosition) {
+    protected void verifyMovePossible(Board board, Position targetPosition) {
         Position sourcePosition = getPosition();
-        if (Position.checkBoundary(targetPosition)) {
-            Piece targetPiece = board.findPiece(targetPosition);
-            int xDir = getXDirection(sourcePosition, targetPosition);
-            int yDir = getYDirection(sourcePosition, targetPosition);
+        Position.checkBoundary(targetPosition);
+        Piece targetPiece = board.findPiece(targetPosition);
+        int xDir = getXDirection(sourcePosition, targetPosition);
+        int yDir = getYDirection(sourcePosition, targetPosition);
 
-            Direction dir = Direction.valueOf(xDir, yDir);
-            List<Direction> dirList = getDirectionList(type);
-            if (dirList.contains(dir)) {
-                Position newPos = Position.createPosition((char) ('a' + sourcePosition.getX() + xDir) + String.valueOf(sourcePosition.getY() + yDir));
-                return !equalsColor(targetPiece.getColor()) && board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
-            }
+        Direction dir = Direction.valueOf(xDir, yDir);
+        List<Direction> dirList = getDirectionList(type);
+        if (!dirList.contains(dir)) {
+            throw new WrongDirectionException();
         }
-        return false;
+        Position newPos = Position.createPosition((char) ('a' + sourcePosition.getX() + xDir) + String.valueOf(sourcePosition.getY() + yDir));
+        if(equalsColor(targetPiece.getColor())){
+            throw new OccupiedSameColorPiece();
+        }
+        board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
     }
 
     private List<Direction> getDirectionList(Type type) {

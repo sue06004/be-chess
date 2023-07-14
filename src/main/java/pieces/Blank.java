@@ -1,5 +1,6 @@
 package pieces;
 
+import exceptions.BlankMoveException;
 import softeer2nd.Board;
 import utils.Position;
 
@@ -13,8 +14,8 @@ public class Blank extends Piece {
         return new Blank(Color.NOCOLOR, Type.NO_PIECE, pos);
     }
 
-    public boolean verifyMovePosition(Board board, Position targetPosition) {
-        return false;
+    public void verifyMovePosition(Board board, Position targetPosition) {
+        throw new BlankMoveException();
     }
 
 }

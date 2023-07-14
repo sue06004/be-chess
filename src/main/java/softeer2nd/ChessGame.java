@@ -1,11 +1,13 @@
 package softeer2nd;
 
+import exceptions.TurnException;
 import pieces.Piece;
 import utils.Position;
 
 public class ChessGame {
 
     private Board board;
+    private Piece.Color turn = Piece.Color.WHITE;
 
     private ChessGame(Board board) {
         this.board = board;
@@ -20,11 +22,13 @@ public class ChessGame {
         Position targetPosition = Position.createPosition(targetPos);
 
         Piece sourcePiece = board.findPiece(sourcePos);
-        if (sourcePiece.verifyMovePosition(board, targetPosition)) {
-            board.moving(sourcePosition, targetPosition);
-            return true;
+        if (!sourcePiece.equalsColor(turn)) {
+            throw new TurnException();
         }
-        return false;
+        sourcePiece.verifyMovePosition(board, targetPosition);
+        board.moving(sourcePosition, targetPosition);
+        nextTurn();
+        return true;
     }
 
     public double calculatePoint(Piece.Color color) {
@@ -67,4 +71,12 @@ public class ChessGame {
         return 0.0;
     }
 
+    public void nextTurn() {
+        if (turn == Piece.Color.WHITE) {
+            turn = Piece.Color.BLACK;
+        } else {
+            turn = Piece.Color.WHITE;
+        }
+
+    }
 }

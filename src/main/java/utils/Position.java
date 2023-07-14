@@ -1,5 +1,7 @@
 package utils;
 
+import exceptions.OutOfBoardBoundaryException;
+
 import java.util.Objects;
 
 import static softeer2nd.Board.BOARD_LENGTH;
@@ -30,8 +32,10 @@ public class Position {
         return y;
     }
 
-    public static boolean checkBoundary(Position pos) {
-        return pos.getY() > 0 && pos.getY() <= BOARD_LENGTH && pos.getX() >= 0 && pos.getX() < BOARD_LENGTH;
+    public static void checkBoundary(Position pos) {
+        if(!(pos.getY() > 0 && pos.getY() <= BOARD_LENGTH && pos.getX() >= 0 && pos.getX() < BOARD_LENGTH)){
+            throw new OutOfBoardBoundaryException();
+        }
     }
 
     @Override

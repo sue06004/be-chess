@@ -1,5 +1,6 @@
 package softeer2nd;
 
+import exceptions.OccupiedPathException;
 import pieces.Blank;
 import pieces.Piece;
 import utils.Position;
@@ -77,20 +78,16 @@ public class Board {
     }
 
 
-
-    public boolean checkOtherPiece(Position pos, Position targetPos, int xDir, int yDir) {
+    public void checkOtherPiece(Position pos, Position targetPos, int xDir, int yDir) {
         if (pos.equals(targetPos)) {
-            return true;
+            return;
         }
-
         Piece piece = findPiece(pos);
-
-        if (piece.isBlank()) {
-            Position newPos = Position.createPosition((char) ('a' + pos.getX() + xDir) + String.valueOf(pos.getY() + yDir));
-            return checkOtherPiece(newPos, targetPos, xDir, yDir);
+        if (!piece.isBlank()) {
+            throw new OccupiedPathException();
         }
-        return false;
-
+        Position newPos = Position.createPosition((char) ('a' + pos.getX() + xDir) + String.valueOf(pos.getY() + yDir));
+        checkOtherPiece(newPos, targetPos, xDir, yDir);
     }
 
     public int countPiece(Piece.Color color, Piece.Type type) {
