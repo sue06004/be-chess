@@ -1,5 +1,6 @@
 package softeer2nd;
 
+import exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import pieces.*;
 import utils.Position;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pieces.Piece.Color;
 
 class ChessGameTest {
@@ -58,14 +60,22 @@ class ChessGameTest {
         String targetPosition6 = "f2";
         String targetPosition7 = "e3";
 
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition1)); //위로
-        assertEquals(true, chessGame.move(targetPosition1, targetPosition2)); // 오른쪽 아래로
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition3)); // 왼위위, 킹이 갈수 없는 경로
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition4)); // out of boundary
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition5)); // 도착지에 같은색
-        assertEquals(true, chessGame.move(targetPosition2, targetPosition6)); // 왼위
-        assertEquals(true, chessGame.move(targetPosition6, targetPosition7)); // 도착지에 다른색
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition, targetPosition1)); //위로
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition1, targetPosition2)); // 오른쪽 아래로
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition2, targetPosition3);
+        }); // 왼위위, 킹이 갈수 없는 경로
+        assertThrows(OutOfBoardBoundaryException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition2, targetPosition4);
+        }); // out of boundary
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(targetPosition2, targetPosition5);
+        }); // 도착지에 같은색
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition2, targetPosition6)); // 왼위
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition6, targetPosition7)); // 도착지에 다른색
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition7);
+        }); //같은 위치
     }
 
     @Test
@@ -98,16 +108,28 @@ class ChessGameTest {
         String targetPosition8 = "g0";
         String targetPosition9 = "e1";
 
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition1)); // 위위
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition2)); // 뛰어넘기
-        assertEquals(true, chessGame.move(targetPosition1, targetPosition3)); // 왼아래 대각선
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition4)); // 도차지에 같은색
-        assertEquals(true, chessGame.move(targetPosition3, targetPosition5)); // 오른쪽 아래
-        assertEquals(false, chessGame.move(targetPosition5, targetPosition6)); // 도착지에 같은색
-        assertEquals(true, chessGame.move(targetPosition5, targetPosition7)); // 오른쪽 대각선 아래에 다른색
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition8)); // out of boundary
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition9)); // 못가는 방향
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition, targetPosition1)); // 위위
+        assertThrows(OccupiedPathException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition1, targetPosition2);
+        }); // 뛰어넘기
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition1, targetPosition3)); // 왼아래 대각선
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(targetPosition3, targetPosition4);
+        }); // 도차지에 같은색
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition3, targetPosition5)); // 오른쪽 아래
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(targetPosition5, targetPosition6);
+        }); // 도착지에 같은색
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition5, targetPosition7)); // 오른쪽 대각선 아래에 다른색
+        assertThrows(OutOfBoardBoundaryException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition8);
+        }); // out of boundary
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition9);
+        }); // 못가는 방향
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition7);
+        }); //같은 위치
     }
 
     @Test
@@ -138,14 +160,24 @@ class ChessGameTest {
         String targetPosition6 = "f8"; //
         String targetPosition7 = "f3"; // 도착지에 다른 색 피스
 
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition1));
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition2));
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition4));
-        assertEquals(false, chessGame.move(targetPosition1, targetPosition5));
-        assertEquals(true, chessGame.move(targetPosition1, targetPosition6));
-        assertEquals(true, chessGame.move(targetPosition6, targetPosition7));
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition, targetPosition1));
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition1, targetPosition2);
+        });
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(targetPosition1, targetPosition3);
+        });
+        assertThrows(OccupiedPathException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition1, targetPosition4);
+        });
+        assertThrows(OutOfBoardBoundaryException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition1, targetPosition5);
+        });
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition1, targetPosition6));
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition6, targetPosition7));
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition7);
+        }); //같은 위치
     }
 
     @Test
@@ -177,15 +209,25 @@ class ChessGameTest {
         String targetPosition7 = "a7";
         String targetPosition8 = "c5"; // 건너 뛰기
 
-        assertEquals(false, chessGame.move(sourcePosition, targetPosition1));
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition2));
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition2, targetPosition4));
-        assertEquals(true, chessGame.move(targetPosition2, targetPosition5));
-        assertEquals(true, chessGame.move(targetPosition5, targetPosition6));
-        assertEquals(true, chessGame.move(targetPosition6, targetPosition7));
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition8));
-        assertEquals(false, chessGame.move(targetPosition7, targetPosition7)); //같은 위치
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(sourcePosition, targetPosition1);
+        });
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition, targetPosition2));
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition2, targetPosition3);
+        });
+        assertThrows(OutOfBoardBoundaryException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition2, targetPosition4);
+        });
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition2, targetPosition5));
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition5, targetPosition6));
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition6, targetPosition7));
+        assertThrows(OccupiedPathException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition8);
+        });
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition7, targetPosition7);
+        }); //같은 위치
     }
 
     @Test
@@ -215,12 +257,20 @@ class ChessGameTest {
         String targetPosition4 = "i3"; // out Boundary
         String targetPosition5 = "a2"; // 못가는 방향
 
-        assertEquals(false, chessGame.move(sourcePosition, targetPosition1));
-        assertEquals(true, chessGame.move(sourcePosition, targetPosition2));
-        assertEquals(true, chessGame.move(targetPosition2, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition4));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition5));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition3)); //같은 위치
+        assertThrows(OccupiedSameColorPiece.class, () -> {
+            chessGame.moveExceptTurn(sourcePosition, targetPosition1);
+        });
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition, targetPosition2));
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition2, targetPosition3));
+        assertThrows(OutOfBoardBoundaryException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition3, targetPosition4);
+        });
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition3, targetPosition5);
+        });
+        assertThrows(WrongDirectionException.class, () -> {
+            chessGame.moveExceptTurn(targetPosition3, targetPosition3);
+        }); //같은 위치
     }
 
     @Test
@@ -235,7 +285,7 @@ class ChessGameTest {
         board.put("b8", King.createBlack(Position.createPosition("b8")));
         board.put("c8", Rook.createBlack(Position.createPosition("c8")));
         board.put("e4", Rook.createBlack(Position.createPosition("e4")));
-        board.put("d5", Knight.createBlack(Position.createPosition("d5")));
+        board.put("c5", Knight.createBlack(Position.createPosition("c5")));
 
         board.put("f2", Pawn.createWhite(Position.createPosition("f2")));
         board.put("a8", Pawn.createWhite(Position.createPosition("a8")));
@@ -253,16 +303,16 @@ class ChessGameTest {
         String targetPosition3 = "e4"; // 대각선에 다른 색
         String targetPosition4 = "e2"; // 못가는 방향
         String targetPosition5 = "a9"; //outbound
-        String targetPosition6 = "c5"; // 대각선에 아무것도 없음
+        String targetPosition6 = "d5"; // 대각선에 아무것도 없음
 
 
-        assertEquals(false, chessGame.move(sourcePosition2, targetPosition1));
-        assertEquals(true, chessGame.move(sourcePosition1, targetPosition2));
-        assertEquals(true, chessGame.move(targetPosition2, targetPosition3));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition4));
-        assertEquals(false, chessGame.move(sourcePosition3, targetPosition5));
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition3)); //같은 위치
-        assertEquals(false, chessGame.move(targetPosition3, targetPosition6));
+        assertThrows(OccupiedPathException.class, () -> {chessGame.moveExceptTurn(sourcePosition2, targetPosition1);});
+        assertEquals(true, chessGame.moveExceptTurn(sourcePosition1, targetPosition2));
+        assertEquals(true, chessGame.moveExceptTurn(targetPosition2, targetPosition3));
+        assertThrows(WrongDirectionException.class, () -> {chessGame.moveExceptTurn(targetPosition3, targetPosition4);});
+        assertThrows(OutOfBoardBoundaryException.class, () -> {chessGame.moveExceptTurn(sourcePosition3, targetPosition5);});
+        assertThrows(WrongDirectionException.class, () -> {chessGame.moveExceptTurn(targetPosition3, targetPosition3);}); //같은 위치
+        assertThrows(NotFoundEnemyException.class, () -> {chessGame.moveExceptTurn(targetPosition3, targetPosition6);});
 
     }
 }

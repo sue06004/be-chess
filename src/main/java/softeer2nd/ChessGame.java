@@ -30,6 +30,18 @@ public class ChessGame {
         nextTurn();
         return true;
     }
+    //테스트 용도
+    public boolean moveExceptTurn(String sourcePos, String targetPos) {
+        Position sourcePosition = Position.createPosition(sourcePos);
+        Position targetPosition = Position.createPosition(targetPos);
+
+        Piece sourcePiece = board.findPiece(sourcePos);
+
+        sourcePiece.verifyMovePosition(board, targetPosition);
+        board.moving(sourcePosition, targetPosition);
+        nextTurn();
+        return true;
+    }
 
     public double calculatePoint(Piece.Color color) {
         double point = 0;

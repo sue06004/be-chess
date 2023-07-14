@@ -43,7 +43,7 @@ public class Main {
                     System.out.println("잘못된 명령을 입력하였습니다.");
                 }
             } catch(RuntimeException e){
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
     }

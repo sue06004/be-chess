@@ -5,6 +5,7 @@ import exceptions.WrongDirectionException;
 import softeer2nd.Board;
 import utils.Direction;
 import utils.Position;
+import utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,11 +122,12 @@ public abstract class Piece implements Comparable<Piece> {
         if (!dirList.contains(dir)) {
             throw new WrongDirectionException();
         }
-        Position newPos = Position.createPosition((char) ('a' + sourcePosition.getX() + xDir) + String.valueOf(sourcePosition.getY() + yDir));
+        String strPosition = StringUtils.createStringPosition(sourcePosition.getX() + xDir, sourcePosition.getY() + yDir);
+        Position newPosition = Position.createPosition(strPosition);
         if (equalsColor(targetPiece.getColor())) {
             throw new OccupiedSameColorPiece();
         }
-        board.checkOtherPiece(newPos, targetPosition, xDir, yDir);
+        board.checkOtherPiece(newPosition, targetPosition, xDir, yDir);
     }
 
     private List<Direction> getDirectionList(Type type) {
